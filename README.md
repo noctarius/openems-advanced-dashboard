@@ -2,14 +2,14 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](#license) [![Release](https://img.shields.io/github/v/release/noctarius/openems-advanced-dashboard)](#releases)
 
-🔋 An advanced desktop dashboard for [OpenEMS](https://openems.io/) that connects to your local OpenEMS instance and
+An advanced desktop dashboard for [OpenEMS](https://openems.io/) that connects to your local OpenEMS instance and
 unlocks additional real-time data and analytics, not available in the official web dashboard. All with local access.
 
 Unlike the default OpenEMS UI, this app gives you a **deeper look into voltages, temperatures, and module balancing**,
 essential for diagnostics, optimization, and energy enthusiasts who want to see what’s really going on inside their
 photovoltaic systems and battery storage systems.
 
-### ⚠️ Disclaimer
+## ⚠️ Disclaimer
 
 This project is an independent, community-driven tool and is **not affiliated with, endorsed by, or officially supported
 by the [OpenEMS project](https://openems.io/) or any related company (e.g. FENECON GmbH)**.
@@ -49,7 +49,7 @@ instance and making hidden data **accessible, visual, and actionable**.
 
 ![](docs/screencast.gif)
 
-## Tested OpenEMS Devices
+## 🔋Tested OpenEMS Devices
 
 OpenEMS is an open source project, and devices running OpenEMS-based software are provided by a variety of vendors.
 OAD has been tested with the following devices:

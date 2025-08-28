@@ -54,7 +54,7 @@ instance and making hidden data **accessible, visual, and actionable**.
 OpenEMS is an open source project, and devices running OpenEMS-based software are provided by a variety of vendors.
 OAD has been tested with the following devices:
 
-- Fenecon Home 20
+- FENECON Home 20
 
 If you have tested OAD with another device, please let us know or send a pull request.
 

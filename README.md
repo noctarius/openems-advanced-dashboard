@@ -1,9 +1,8 @@
 # OpenEMS Advanced Dashboard
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](#license)  
-[![Release](https://img.shields.io/github/v/release/noctarius/openems-advanced-dashboard)](#releases)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](#license) [![Release](https://img.shields.io/github/v/release/noctarius/openems-advanced-dashboard)](#releases)
 
-🔋 **A powerful desktop dashboard for [OpenEMS](https://openems.io/)** that connects to your local OpenEMS instance and
+🔋 An advanced desktop dashboard for [OpenEMS](https://openems.io/) that connects to your local OpenEMS instance and
 unlocks additional real-time data and analytics, not available in the official web dashboard. All with local access.
 
 Unlike the default OpenEMS UI, this app gives you a **deeper look into voltages, temperatures, and module balancing**,
@@ -20,8 +19,6 @@ warranties of merchantability, fitness for a particular purpose, and non-infring
 
 By using this software, you agree that the authors and contributors are **not liable for any direct, indirect,
 incidental, or consequential damages** arising from its use. Use at your own risk.
-
----
 
 ## ✨ Motivation
 
@@ -40,8 +37,6 @@ details are critical when you want to:
 **OpenEMS Advanced Dashboard (OAD)** fills this gap by connecting directly to your local OpenEMS-based energy management
 instance and making hidden data **accessible, visual, and actionable**.
 
----
-
 ## 🚀 Features
 
 - 🔍 **Cell-level monitoring** — Voltage, temperature, and state-of-balance per module.
@@ -50,13 +45,9 @@ instance and making hidden data **accessible, visual, and actionable**.
 - 🖥️ **Tested on real devices** (e.g. *Fenecon Home 20*) with room for expansion.
 - 🛠️ **Developer-friendly** — Extendable, easy to build, and open for contributions.
 
----
-
 ## 🖼️ Screenshots
 
 ![](docs/screencast.gif)
-
----
 
 ## Tested OpenEMS Devices
 
@@ -66,8 +57,6 @@ OAD has been tested with the following devices:
 - Fenecon Home 20
 
 If you have tested OAD with another device, please let us know or send a pull request.
-
----
 
 ## 📦 Getting Started
 

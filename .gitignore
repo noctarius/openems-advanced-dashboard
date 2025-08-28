@@ -1,0 +1,8 @@
+.idea/
+.vscode/
+testing/
+node_modules/
+build/bin
+frontend/dist
+
+.DS_Store

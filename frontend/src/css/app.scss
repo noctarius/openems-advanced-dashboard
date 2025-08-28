@@ -1,0 +1,56 @@
+// app global css in SCSS form
+
+$battery-color: #dadada;
+$module-color: #fff;
+
+.title {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.battery-tower {
+  display: flex;
+  justify-content: center;
+
+  .battery {
+    position: relative;
+    width: fit-content;
+    margin-top: 100px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      display: block;
+      width: 40%;
+      height: 45px;
+      left: 50%;
+      top: -45px;
+      transform: translateX(-50%);
+      background-color: $battery-color;
+      border-radius: 10px 10px 0 0;
+      z-index: 1;
+    }
+
+    .module-tower {
+      margin-bottom: 5px;
+      background-color: $battery-color;
+      width: fit-content;
+      padding: 10px;
+      border-radius: 10px;
+
+      .module {
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 10px;
+        background-color: $module-color;
+
+        .cell {
+          font-size: 12px;
+          border-radius: 4px;
+          border: 0;
+        }
+      }
+    }
+  }
+}

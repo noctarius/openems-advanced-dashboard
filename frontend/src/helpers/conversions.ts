@@ -1,6 +1,13 @@
 import {openems} from "../../wailsjs/go/models";
 import ChannelItem = openems.ChannelItem;
 
+export const convertPercent = (item: number, zeroToHundred: boolean = false): string => {
+    if (zeroToHundred) {
+        item = item / 100;
+    }
+    return `${Math.round(item * 10000) / 100}%`;
+}
+
 export const convertWatts = (item: ChannelItem | undefined | number, abs: boolean = true): string | undefined => {
     if (item === undefined) return undefined;
     const watts = typeof item === "object" ? item.unit === "W" ? item.value : item.value * 1000 : item;

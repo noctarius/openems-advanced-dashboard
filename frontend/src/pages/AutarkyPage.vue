@@ -13,6 +13,7 @@
                 <line-chart-component
                     :series="autarkySeries"
                     :loading="loading"
+                    :converter="convertPercent"
                     style="height: 390px;"
                     group="forecast"
                 />
@@ -29,9 +30,9 @@
 import MainComponent from "../components/MainComponent.vue";
 import LineChartComponent from "../components/LineChartComponent.vue";
 import {QueryHistoricData,} from "../../wailsjs/go/main/App";
-import {computed, onUnmounted, ref} from "vue";
+import {computed, ref} from "vue";
 import {LOCAL, UTC} from "../helpers/time/Timezone";
-import {disconnect} from "echarts/core";
+import {convertPercent} from "../helpers/conversions";
 
 const autarkyData = ref<number[][]>([]);
 const loading = ref<boolean>(true);
@@ -68,7 +69,7 @@ const loadForecasts = async () => {
         const totalConsumption = timeseries.data["_sum/ConsumptionActivePower"][index];
         const gridConsumption = timeseries.data["_sum/GridToConsumptionPower"][index];
 
-        return [timestamp, Math.round((gridConsumption / totalConsumption) * 100) / 100]
+        return [timestamp, Math.round((1 - (gridConsumption / totalConsumption)) * 10000) / 10000]
       });
 
   autarkyData.value = autarky;
@@ -76,8 +77,4 @@ const loadForecasts = async () => {
 }
 
 loadForecasts();
-
-onUnmounted(() => {
-  disconnect("forecast");
-})
 </script>

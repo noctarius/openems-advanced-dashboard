@@ -5,6 +5,7 @@ import CellBalancePage from "../pages/CellBalancePage.vue";
 import ErrorNotFound from "../pages/ErrorNotFound.vue";
 import ModuleTemperatures from "../pages/ModuleTemperatures.vue";
 import ForecastPage from "../pages/ForecastPage.vue";
+import AutarkyPage from "../pages/AutarkyPage.vue";
 
 const routes: RouteRecordRaw[] = [
     {
@@ -46,6 +47,17 @@ const routes: RouteRecordRaw[] = [
         component: MainLayout,
         children: [{
             path: '', component: ForecastPage
+        }],
+        meta: {
+            icon: 'mdi-chart-line'
+        }
+    },
+    {
+        name: 'Autarky Graph',
+        path: '/autarky',
+        component: MainLayout,
+        children: [{
+            path: '', component: AutarkyPage
         }],
         meta: {
             icon: 'mdi-chart-line'

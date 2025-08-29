@@ -17,7 +17,6 @@ import {EChartsOption} from "echarts";
 import {LOCAL} from "../helpers/time/Timezone";
 import {Timestamp} from "../helpers/time/Timestamp";
 import {openems} from "../../wailsjs/go/models";
-import ChannelItem = openems.ChannelItem;
 
 interface DataSeries {
   name: string,
@@ -27,7 +26,7 @@ interface DataSeries {
 
 const {series, converter, loading = true} = defineProps<{
   series: DataSeries[],
-  converter?: (item: ChannelItem | number) => string | undefined
+  converter?: (item: number) => string | undefined
   loading?: boolean
   group?: string
 }>();

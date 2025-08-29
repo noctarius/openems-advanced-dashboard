@@ -44,11 +44,9 @@
     <v-container
         style="padding-right: 0"
     >
-      <suspense>
-        <router-view
-            :key="$route.fullPath"
-        />
-      </suspense>
+      <router-view
+          :key="$route.fullPath"
+      />
     </v-container>
   </v-main>
   <SettingsModal

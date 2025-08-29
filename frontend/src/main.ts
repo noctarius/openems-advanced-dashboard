@@ -3,13 +3,14 @@ import 'vuetify/styles';
 import {createVuetify} from 'vuetify';
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
-import { aliases, mdi } from 'vuetify/iconsets/mdi'
+import {aliases, mdi} from 'vuetify/iconsets/mdi'
 import App from './App.vue'
 import '@mdi/font/css/materialdesignicons.css'
 import './style.css';
 import './css/app.scss';
 import {Router} from "./router";
 import {useEcharts} from "./echarts";
+import pinia from "./stores";
 
 try {
     const vuetify = createVuetify({
@@ -47,7 +48,12 @@ try {
         }
     })
 
-    createApp(App).use(Router).use(vuetify).use(useEcharts).mount('#app')
+    createApp(App)
+        .use(Router)
+        .use(vuetify)
+        .use(useEcharts)
+        .use(pinia)
+        .mount('#app');
 } catch (e) {
     console.error(e)
 }

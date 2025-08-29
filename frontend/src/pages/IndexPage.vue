@@ -172,14 +172,18 @@ const cards = computed<Card[]>(() => {
       title: "Self-Consumption",
       value() {
         const production = productionPower.value?.value || 0;
-        const consumption = directConsumptionPower.value?.value || 0;
+        const directConsumption = directConsumptionPower.value?.value || 0;
+        const fullConsumption = directConsumption === 0 ? consumptionPower.value?.value || 0 : 0;
         const chargeDischarge = chargeDischargePower.value?.value || 0;
         const charging = chargeDischarge < 0 ? -chargeDischarge : 0;
-        const selfConsumption = production > 0 ? Math.round((charging + consumption) / production * 100) : 0;
+        const discharging = chargeDischarge > 0 ? chargeDischarge : 0;
+        const usablePower = production + discharging;
+        const consumption = charging + directConsumption + fullConsumption;
+        const selfConsumption = usablePower > 0 ? Math.round(consumption / usablePower * 100) : 0;
         return {
           type: PercentageBarComponent,
           props: {
-            value: selfConsumption,
+            value: selfConsumption > 100 ? 100 : selfConsumption,
           }
         }
       }

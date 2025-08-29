@@ -1,8 +1,7 @@
-//go:build debug
-// +build debug
+//go:build !debug
 
 package main
 
 func isDebug() bool {
-	return true
+	return false
 }

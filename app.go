@@ -24,7 +24,6 @@ func NewApp() *App {
 	if err := storage.EnsureConfigDirectory(); err != nil {
 		panic(err)
 	}
-
 	apiKey := "EQ8c54jo2t2gj4FA"
 	return &App{
 		openEms: openems.NewOpenEms("10.96.0.90"),

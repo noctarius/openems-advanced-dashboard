@@ -45,7 +45,7 @@
         style="padding-right: 0"
     >
       <suspense>
-        <router-view/>
+        <router-view :key="$route.fullPath"/>
       </suspense>
     </v-container>
   </v-main>
@@ -56,17 +56,28 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
 import {EssentialLinkProps} from '../components/EssentialLink.vue';
 import SettingsModal from "../modal/SettingsModal.vue";
 import routes from "../router/routes";
+import type {RouteRecordRaw} from "vue-router";
 
-const linksList: EssentialLinkProps[] = routes.filter(route => "name" in route).map(route => {
-  return {
-    title: route.name as string,
-    icon: (route.meta && "icon" in route.meta ? route.meta.icon : '') as string,
-    link: route.path
-  }
+const linksList = computed<EssentialLinkProps[]>(() => {
+  const links = (prefix: string, route: RouteRecordRaw): { title?: string, icon?: string, link: string }[] => {
+    const link = `${prefix}${route.path}`;
+    return [
+      {
+        title: route.name as string | undefined,
+        icon: (route.meta && "icon" in route.meta ? route.meta.icon : '') as string,
+        link
+      },
+      ...(!route.children ? [] : route.children.flatMap(r => links(link, r)))
+    ]
+  };
+
+  return routes
+      .flatMap(route => links("", route))
+      .filter(route => route.title) as EssentialLinkProps[];
 });
 
 const leftDrawerOpen = ref(false);

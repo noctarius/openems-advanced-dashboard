@@ -1,27 +1,25 @@
 <template>
   <div class="position-relative">
     <main-component title="Autarky Graph">
-      <suspense>
-        <div
-            style="width: 100%; height: 850px;"
-        >
-          <v-container style="height: 100%;">
-            <v-row>
-              <v-col
-                  cols="12"
-              >
-                <line-chart-component
-                    :series="autarkySeries"
-                    :loading="loading"
-                    :converter="convertPercent"
-                    style="height: 390px;"
-                    group="forecast"
-                />
-              </v-col>
-            </v-row>
-          </v-container>
-        </div>
-      </suspense>
+      <div
+          style="width: 100%; height: 850px;"
+      >
+        <v-container style="height: 100%;">
+          <v-row>
+            <v-col
+                cols="12"
+            >
+              <line-chart-component
+                  :series="autarkySeries"
+                  :loading="loading"
+                  :converter="convertPercent"
+                  style="height: 390px;"
+                  group="forecast"
+              />
+            </v-col>
+          </v-row>
+        </v-container>
+      </div>
     </main-component>
   </div>
 </template>

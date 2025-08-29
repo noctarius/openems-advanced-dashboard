@@ -45,7 +45,9 @@
         style="padding-right: 0"
     >
       <suspense>
-        <router-view :key="$route.fullPath"/>
+        <router-view
+            :key="$route.fullPath"
+        />
       </suspense>
     </v-container>
   </v-main>

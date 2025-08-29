@@ -1,52 +1,50 @@
 <template>
   <div class="position-relative">
     <main-component title="Production Forecast">
-      <suspense>
-        <div
-            style="width: 100%; height: 850px;"
-        >
-          <v-container style="height: 100%;">
-            <v-row>
-              <v-col
-                  cols="1"
-                  style="writing-mode: vertical-rl; transform: rotate(180deg); align-content: flex-end;"
-              >
-                Weather-based Forecast<br/>and Production
-              </v-col>
-              <v-col
-                  cols="11"
-              >
-                <line-chart-component
-                    :series="weatherSeries"
-                    :converter="convertWatts"
-                    :loading="loading"
-                    style="height: 390px;"
-                    group="forecast"
-                />
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col
-                  cols="1"
-                  style="writing-mode: vertical-rl; transform: rotate(180deg); align-content: flex-end;"
-              >
-                Clear Sky Forecast
-              </v-col>
-              <v-col
-                  cols="11"
-              >
-                <line-chart-component
-                    :series="clearSkySeries"
-                    :converter="convertWatts"
-                    :loading="loading"
-                    style="height: 390px;"
-                    group="forecast"
-                />
-              </v-col>
-            </v-row>
-          </v-container>
-        </div>
-      </suspense>
+      <div
+          style="width: 100%; height: 850px;"
+      >
+        <v-container style="height: 100%;">
+          <v-row>
+            <v-col
+                cols="1"
+                style="writing-mode: vertical-rl; transform: rotate(180deg); align-content: flex-end;"
+            >
+              Weather-based Forecast<br/>and Production
+            </v-col>
+            <v-col
+                cols="11"
+            >
+              <line-chart-component
+                  :series="weatherSeries"
+                  :converter="convertWatts"
+                  :loading="loading"
+                  style="height: 390px;"
+                  group="forecast"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col
+                cols="1"
+                style="writing-mode: vertical-rl; transform: rotate(180deg); align-content: flex-end;"
+            >
+              Clear Sky Forecast
+            </v-col>
+            <v-col
+                cols="11"
+            >
+              <line-chart-component
+                  :series="clearSkySeries"
+                  :converter="convertWatts"
+                  :loading="loading"
+                  style="height: 390px;"
+                  group="forecast"
+              />
+            </v-col>
+          </v-row>
+        </v-container>
+      </div>
     </main-component>
     <div class="position-absolute bottom-0" style="right: 10px;">
       <span class="mr-2">Powered by forecast.solar</span>

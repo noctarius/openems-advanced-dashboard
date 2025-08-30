@@ -236,7 +236,7 @@ export const useOpenEms = defineStore("openems", () => {
     return response.result;
   };
 
-  const callRestApi = async <T extends {}>(method: string, path: string, body?: string): Promise<T> => {
+  const callRestApi = async <T>(method: string, path: string, body?: string): Promise<T> => {
     const response = await CallOpenEmsApi(method, path, body);
     if (response.statusCode !== 200) {
       throw new Error(`HTTP ${response.statusCode}: ${response.body}`);

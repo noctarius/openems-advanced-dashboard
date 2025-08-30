@@ -1,13 +1,15 @@
+type Callback = (...args: any[]) => any;
+
 interface Wails {
   Callback(incomingMessage: string): void;
 
   callbacks: {
-    [name: string]: {timeoutHandle?: ReturnType<setTimeout>; resolve: Function; reject: Function};
+    [name: string]: {timeoutHandle?: ReturnType<setTimeout>; resolve: Callback; reject: Callback};
   };
 
   EventsNotify(notifyMessage: string): void;
 
-  eventListeners: {[name: string]: new (eventName: string, callback: Function, maxCallbacks: number) => any};
+  eventListeners: {[name: string]: new (eventName: string, callback: Callback, maxCallbacks: number) => any};
 }
 
 interface Window {

@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-const median = (values: openems.Cell[]): number => {
+const median = (values: Cell[]): number => {
   if (values.length === 0) {
     throw new Error('Input array is empty');
   }
@@ -24,11 +24,11 @@ const median = (values: openems.Cell[]): number => {
 </script>
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import {openems} from "../../wailsjs/go/models";
+import {Cell} from "../openems/types";
 
 const props = defineProps<{
-  cell: openems.Cell;
-  cells: openems.Cell[];
+  cell: Cell;
+  cells: Cell[];
 }>();
 
 const value = ref<number>(props.cell.value);

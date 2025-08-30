@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
+	"myproject/internal/config"
 	"myproject/internal/openems"
 	"myproject/internal/solarforecast"
-	"myproject/internal/storage"
 	"runtime"
 	"time"
 
@@ -21,16 +21,13 @@ type App struct {
 
 // NewApp creates a new App application struct
 func NewApp() *App {
-	if err := storage.EnsureConfigDirectory(); err != nil {
-		panic(err)
-	}
-	apiKey := "EQ8c54jo2t2gj4FA"
+	config := config.GetConfig()
 	return &App{
 		openEms: openems.NewOpenEms("10.96.0.90"),
 		forecaster: solarforecast.NewSolarForecast(solarforecast.Configuration{
-			ApiKey:    &apiKey,
-			Latitude:  51.217668531160555,
-			Longitude: 7.010729031753726,
+			ApiKey:    &config.ForecastSolar.ApiKey,
+			Latitude:  config.ForecastSolar.Latitude,
+			Longitude: config.ForecastSolar.Longitude,
 			Planes: []solarforecast.SolarPlane{
 				{
 					Declination: 25,
@@ -54,7 +51,6 @@ func (a *App) startup(ctx context.Context) {
 }
 
 func (a *App) shutdown(ctx context.Context) {
-	a.openEms.Stop()
 }
 
 func (a *App) menu() *menu.Menu {
@@ -65,21 +61,16 @@ func (a *App) menu() *menu.Menu {
 	return appMenu
 }
 
-func (a *App) ReadBatteries() ([]*openems.Battery, error) {
-	return a.openEms.ReadBatteries()
-}
-
-func (a *App) ReadComponent(component string) ([]openems.ChannelItem, error) {
-	return a.openEms.GetComponent(component)
-}
-
-func (a *App) GetComponentConfigurations() (map[string]openems.Component, error) {
-	return a.openEms.GetComponentConfigurations()
+// ### OpenEMS API ###
+func (a *App) CallOpenEmsApi(method, path string, body any) (*openems.Response, error) {
+	return a.openEms.CallOpenEmsApi(method, path, body)
 }
 
 func (a *App) GetSystemUpdateState() (*string, error) {
 	return a.openEms.GetSystemUpdateState()
 }
+
+// ### Forecast Solar API ###
 
 func (a *App) GetSolarForecast() ([]solarforecast.Forecast, error) {
 	return a.forecaster.GetEstimate()
@@ -87,6 +78,16 @@ func (a *App) GetSolarForecast() ([]solarforecast.Forecast, error) {
 
 func (a *App) GetClearSkyForecast() ([]solarforecast.Forecast, error) {
 	return a.forecaster.GetClearSkyEstimate()
+}
+
+// ### Config API ###
+
+func (a *App) GetConfig() *config.Config {
+	return config.GetConfig()
+}
+
+func (a *App) SaveConfig(c config.Config) error {
+	return config.SaveConfig(c)
 }
 
 func (a *App) QueryHistoricEnergyPerPeriod(

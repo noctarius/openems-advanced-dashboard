@@ -17,11 +17,10 @@
 </template>
 
 <script setup lang="ts">
-
-import {openems} from "../../wailsjs/go/models";
+import {Tower} from "../openems/types";
 
 defineProps<{
-  tower: openems.Tower;
+  tower: Tower;
 }>();
 </script>
 

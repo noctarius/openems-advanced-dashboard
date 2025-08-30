@@ -10,9 +10,18 @@
         <v-card
             :title="typeof card.title === 'function' ? card.title() : card.title"
         >
-          <v-container>
-            <status-card v-for="item in card.items" :title="item.title" :value="item.value"/>
-          </v-container>
+          <v-skeleton-loader
+              :loading="openEms.isLoading"
+              height="240"
+              type="image, list-item-two-line"
+          >
+            <v-container>
+              <status-card
+                  v-for="item in card.items"
+                  :title="item.title"
+                  :value="item.value"/>
+            </v-container>
+          </v-skeleton-loader>
         </v-card>
       </v-col>
     </v-row>
@@ -20,16 +29,14 @@
 </template>
 
 <script setup lang="ts">
-import {ReadComponent} from "../../wailsjs/go/main/App";
 import {computed, onUnmounted, ref} from "vue";
 import {convertVolts, convertWatts, covertHertz, limitTextLength, powerChannelStatus} from "../helpers/conversions";
-import {openems} from "../../wailsjs/go/models";
 import MainComponent from "../components/MainComponent.vue";
 import StatusCard, {NodeDefinition} from "../components/StatusCard.vue";
-import {sellToGridLimitStateToString} from "../types/openems";
+import {ChannelItem, sellToGridLimitStateToString} from "../openems/types";
 import PercentageBarComponent from "../components/PercentageBarComponent.vue";
 import {useComponentsStore} from "../stores/openems-components-store";
-import ChannelItem = openems.ChannelItem;
+import {useOpenEms} from "../openems";
 
 interface Card {
   title: string | (() => string);
@@ -57,13 +64,16 @@ const voltagePhases = ref<(ChannelItem | undefined)[][]>([]);
 const frequencyPhases = ref<(ChannelItem | undefined)[][]>([]);
 
 const componentsStore = useComponentsStore();
+const openEms = useOpenEms();
 
 const meters = computed<string[]>(() =>
     componentsStore.selectMeters
 );
 
 const meterNames = computed<string[]>(() =>
-    componentsStore.selectMeters.map(meter => componentsStore.components[meter].alias)
+    meters.value
+        .map(meter => openEms.getComponent(meter)?.alias)
+        .filter(name => name !== undefined)
 );
 
 const chargers = computed<string[]>(() =>
@@ -71,7 +81,9 @@ const chargers = computed<string[]>(() =>
 );
 
 const chargerNames = computed<string[]>(() =>
-    componentsStore.selectChargers.map(charger => componentsStore.components[charger].alias)
+    chargers.value
+        .map(charger => openEms.getComponent(charger)?.alias)
+        .filter(name => name !== undefined)
 );
 
 const secondaryMeters = computed<string[]>(() =>
@@ -233,7 +245,7 @@ const cards = computed<Card[]>(() => {
 });
 
 const update = async () => {
-  const ess0 = await ReadComponent("ess0");
+  const ess0 = openEms.readComponent("ess0");
   const soc = ess0.find(item => item.address === "ess0/Soc");
   if (soc) {
     stateOfCharge.value = soc.value;
@@ -245,7 +257,7 @@ const update = async () => {
   }
 
   for (const charger of chargers.value) {
-    const component = await ReadComponent(charger);
+    const component = openEms.readComponent(charger);
     if (component) {
       const power = component.find(item => item.address === `${charger}/ActualPower`);
       if (power) {
@@ -255,7 +267,7 @@ const update = async () => {
   }
 
   for (const meter of secondaryMeters.value) {
-    const component = await ReadComponent(meter);
+    const component = openEms.readComponent(meter);
     if (component) {
       const power = component.find(item => item.address === `${meter}/ActivePower`);
       if (power) {
@@ -264,7 +276,7 @@ const update = async () => {
     }
   }
 
-  const sum = await ReadComponent("_sum");
+  const sum = openEms.readComponent("_sum");
   if (sum) {
     let power = sum.find(item => item.address === "_sum/ConsumptionActivePower");
     if (power) {
@@ -309,7 +321,7 @@ const update = async () => {
     }
     consumptionPhases.value = curConsumptionPhases;
 
-    const gridOptimizedCharge = await ReadComponent("ctrlGridOptimizedCharge0");
+    const gridOptimizedCharge = openEms.readComponent("ctrlGridOptimizedCharge0");
     if (gridOptimizedCharge) {
       const limitState = gridOptimizedCharge.find(item => item.address === "ctrlGridOptimizedCharge0/SellToGridLimitState");
       if (limitState) {
@@ -320,7 +332,7 @@ const update = async () => {
     const voltages: (ChannelItem | undefined)[][] = [];
     const frequencies: (ChannelItem | undefined)[][] = [];
     for (const meter of meters.value) {
-      const component = await ReadComponent(meter);
+      const component = openEms.readComponent(meter);
       if (component) {
         const index = meters.value.indexOf(meter);
         voltages[index] = voltages[index] || [];

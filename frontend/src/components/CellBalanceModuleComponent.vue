@@ -29,15 +29,15 @@
 <script setup lang="ts">
 import {computed} from 'vue';
 import CellComponent from './CellComponent.vue';
-import {openems} from "../../wailsjs/go/models";
+import {Cell, Module} from "../openems/types";
 
 const props = defineProps<{
-  module: openems.Module;
+  module: Module;
 }>();
 
 const chunkedCells = computed(() => {
   const chunkSize = 7;
-  const chunks: openems.Cell[][] = [];
+  const chunks: Cell[][] = [];
   for (let i = 0; i < props.module.cells.sort((a, b) => a.id - b.id).length; i += chunkSize) {
     chunks.push(props.module.cells.slice(i, i + chunkSize));
   }

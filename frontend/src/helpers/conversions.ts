@@ -1,5 +1,4 @@
-import {openems} from "../../wailsjs/go/models";
-import ChannelItem = openems.ChannelItem;
+import {ChannelItem} from "../openems/types";
 
 export const convertPercent = (item: number, zeroToHundred: boolean = false): string => {
     if (zeroToHundred) {

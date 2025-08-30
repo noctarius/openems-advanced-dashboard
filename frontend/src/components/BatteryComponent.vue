@@ -21,10 +21,10 @@
 
 <script setup lang="ts">
 import TowerComponent from '../components/TowerComponent.vue';
-import {openems} from "../../wailsjs/go/models";
+import {Battery} from "../openems/types";
 
 defineProps<{
-  battery: openems.Battery;
+  battery: Battery;
 }>();
 </script>
 

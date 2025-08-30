@@ -27,10 +27,10 @@
 
 <script setup lang="ts">
 import ModuleTemperatureSectorComponent from '../components/ModuleTemperatureSectorComponent.vue';
-import {openems} from "../../wailsjs/go/models";
+import {Module} from "../openems/types";
 
 defineProps<{
-  module: openems.Module;
+  module: Module;
 }>();
 </script>
 

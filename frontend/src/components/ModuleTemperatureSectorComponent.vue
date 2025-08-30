@@ -1,7 +1,7 @@
 <template>
   <td
-    :class="{ 'flash-border': flash, cell: 'cell' }"
-    :style="{
+      :class="{ 'flash-border': flash, cell: 'cell' }"
+      :style="{
       backgroundColor: calculatedTemperatureColor,
     }"
   >
@@ -10,15 +10,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
-import {openems} from "../../wailsjs/go/models";
+import {computed, ref, watch} from 'vue';
+import {ModuleTemperature} from "../openems/types";
 
 const props = defineProps<{
-  temperature: openems.ModuleTemperature;
-  temperatures: openems.ModuleTemperature[];
+  temperature: ModuleTemperature;
+  temperatures: ModuleTemperature[];
 }>();
 
-const convertTemperature = (temperature: openems.ModuleTemperature) => {
+const convertTemperature = (temperature: ModuleTemperature) => {
   if (temperature.unit === 'dC') {
     return Math.floor(temperature.value * 10) / 100;
   }
@@ -30,30 +30,30 @@ const flash = ref<boolean>(false);
 const previousValue = ref<number>(props.temperature.value);
 
 watch(
-  () => props.temperature,
-  () => {
-    const same = props.temperature.value === previousValue.value;
-    previousValue.value = props.temperature.value;
-    //console.log(typeof props.temperature.value, props.temperature.value, typeof previousValue.value, previousValue.value, same);
-    if (same) return;
+    () => props.temperature,
+    () => {
+      const same = props.temperature.value === previousValue.value;
+      previousValue.value = props.temperature.value;
+      //console.log(typeof props.temperature.value, props.temperature.value, typeof previousValue.value, previousValue.value, same);
+      if (same) return;
 
-    setTimeout(() => {
-      value.value = convertTemperature(props.temperature);
-    }, 1000);
-    flash.value = true;
-    setTimeout(() => {
-      flash.value = false;
-    }, 2000);
-  },
-  { deep: true },
+      setTimeout(() => {
+        value.value = convertTemperature(props.temperature);
+      }, 1000);
+      flash.value = true;
+      setTimeout(() => {
+        flash.value = false;
+      }, 2000);
+    },
+    {deep: true},
 );
 
 const calculatedTemperatureColor = computed(() => {
   if (props.temperature.value > 100 && props.temperature.value < 300) {
     return '#90EE90';
   } else if (
-    (props.temperature.value >= 300 && props.temperature.value < 500) ||
-    (props.temperature.value >= 0 && props.temperature.value < 100)
+      (props.temperature.value >= 300 && props.temperature.value < 500) ||
+      (props.temperature.value >= 0 && props.temperature.value < 100)
   ) {
     return '#FFFFC5';
   } else {

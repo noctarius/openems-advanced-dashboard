@@ -49,16 +49,18 @@
 <script setup lang="ts">
 import BatteryComponent from './BatteryComponent.vue';
 import {onUnmounted, reactive, ref} from 'vue';
-import {ReadBatteries} from "../../wailsjs/go/main/App";
-import {openems} from "../../wailsjs/go/models";
+import {Battery} from "../openems/types";
+import {useOpenEms} from "../openems";
 
-const batteries = reactive<openems.Battery[]>([]);
+const openEms = useOpenEms();
+
+const batteries = reactive<Battery[]>([]);
 const selectedBattery = reactive<{ id: number | undefined }>({id: undefined});
 const tabs = ref<string | null>(null)
 
 const updateVisualBattery = async () => {
   try {
-    const update = await ReadBatteries();
+    const update = openEms.readBatteries();
     batteries.length = 0
     batteries.push(...update);
     if (selectedBattery.id === undefined) {

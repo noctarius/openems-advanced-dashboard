@@ -1,40 +1,42 @@
 import {acceptHMRUpdate, defineStore} from 'pinia';
-import {GetComponentConfigurations} from "../../wailsjs/go/main/App";
 import {computed, ref} from "vue";
+import {Component} from "../openems/types";
+import {useOpenEms} from "../openems";
 
 type Status = 'idle' | 'loading' | 'error' | 'ready';
 
-type Component = {
-    alias: string,
-    factoryId: string,
-    properties: { [key: string]: any }
-};
-
 export const useComponentsStore = defineStore('openems-components', () => {
-    let status: Status = 'idle';
-    let error: Error | null = null;
+    const status = ref<Status>('idle');
+
+    const openEms = useOpenEms();
 
     const components = ref<Record<string, Component>>({});
+    const error = ref<Error | null>(null);
 
-    const isReady = computed(() => status === 'ready');
-    const isLoading = computed(() => status === 'loading');
-    const selectMeters = computed(() => Object.keys(components.value).filter(key => key.startsWith("meter")));
-    const selectChargers = computed(() => Object.keys(components.value).filter(key => key.startsWith("charger")));
+    const isReady = computed(() => status.value === 'ready');
+    const isLoading = computed(() => status.value === 'loading');
+    const selectMeters = computed(() => [
+        ...openEms.selectComponents("meter")
+    ]);
+    const selectChargers = computed(() => [
+        ...openEms.selectComponents("charger")
+    ]);
 
     const initialize = async () => {
-        status = 'loading';
+        status.value = 'loading';
         try {
-            components.value = await GetComponentConfigurations();
-            status = 'ready';
+            components.value = openEms.readComponentConfigurations();
+            status.value = 'ready';
         } catch (err) {
-            status = 'error';
-            error = err as Error;
+            status.value = 'error';
+            error.value = err as Error;
             throw err;
         }
     };
 
     return {
         components,
+        error,
         isReady,
         isLoading,
         selectMeters,

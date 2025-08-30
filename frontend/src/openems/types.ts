@@ -109,3 +109,8 @@ export interface Battery {
     id: number
     towers: Tower[]
 }
+
+export interface HistoricTimeseries {
+    timestamps: string[]
+    data: Record<string, (number | null)[]>
+}

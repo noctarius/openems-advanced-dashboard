@@ -128,20 +128,6 @@ export namespace config {
 
 export namespace openems {
 	
-	export class HistoricTimeseries {
-	    timestamps: string[];
-	    data: Record<string, Array<number>>;
-	
-	    static createFrom(source: any = {}) {
-	        return new HistoricTimeseries(source);
-	    }
-	
-	    constructor(source: any = {}) {
-	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.timestamps = source["timestamps"];
-	        this.data = source["data"];
-	    }
-	}
 	export class Response {
 	    body?: string;
 	    statusCode: number;
@@ -210,23 +196,6 @@ export namespace solarforecast {
 		    }
 		    return a;
 		}
-	}
-
-}
-
-export namespace time {
-	
-	export class Time {
-	
-	
-	    static createFrom(source: any = {}) {
-	        return new Time(source);
-	    }
-	
-	    constructor(source: any = {}) {
-	        if ('string' === typeof source) source = JSON.parse(source);
-	
-	    }
 	}
 
 }

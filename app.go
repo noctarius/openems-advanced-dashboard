@@ -6,7 +6,6 @@ import (
 	"myproject/internal/openems"
 	"myproject/internal/solarforecast"
 	"runtime"
-	"time"
 
 	"github.com/wailsapp/wails/v2/pkg/menu"
 )
@@ -23,7 +22,7 @@ type App struct {
 func NewApp() *App {
 	config := config.GetConfig()
 	return &App{
-		openEms: openems.NewOpenEms("10.96.0.90"),
+		openEms: openems.NewOpenEms(),
 		forecaster: solarforecast.NewSolarForecast(solarforecast.Configuration{
 			ApiKey:    &config.ForecastSolar.ApiKey,
 			Latitude:  config.ForecastSolar.Latitude,
@@ -66,10 +65,6 @@ func (a *App) CallOpenEmsApi(method, path string, body any) (*openems.Response, 
 	return a.openEms.CallOpenEmsApi(method, path, body)
 }
 
-func (a *App) GetSystemUpdateState() (*string, error) {
-	return a.openEms.GetSystemUpdateState()
-}
-
 // ### Forecast Solar API ###
 
 func (a *App) GetSolarForecast() ([]solarforecast.Forecast, error) {
@@ -88,16 +83,4 @@ func (a *App) GetConfig() *config.Config {
 
 func (a *App) SaveConfig(c config.Config) error {
 	return config.SaveConfig(c)
-}
-
-func (a *App) QueryHistoricEnergyPerPeriod(
-	fromDate, toDate time.Time, timezone string, channels []string, resolutionValue int, resolutionUnit string,
-) (*openems.HistoricTimeseries, error) {
-	return a.openEms.QueryHistoricEnergyPerPeriod(fromDate, toDate, timezone, channels, resolutionValue, resolutionUnit)
-}
-
-func (a *App) QueryHistoricData(
-	fromDate, toDate time.Time, timezone string, channels []string, resolutionValue int, resolutionUnit string,
-) (*openems.HistoricTimeseries, error) {
-	return a.openEms.QueryHistoricData(fromDate, toDate, timezone, channels, resolutionValue, resolutionUnit)
 }

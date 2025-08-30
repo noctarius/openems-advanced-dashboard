@@ -1,8 +1,17 @@
-import {Battery, ChannelItem, Component, Module, ModuleTemperature, PhotovoltaicPlane} from "./types";
+import {
+    Battery,
+    ChannelItem,
+    Component,
+    HistoricTimeseries,
+    Module,
+    ModuleTemperature,
+    PhotovoltaicPlane
+} from "./types";
 import {useComponentsStore} from "../stores/openems-components-store";
 import {CallOpenEmsApi} from "../../wailsjs/go/main/App";
 import {defineStore} from "pinia";
 import {computed, ref} from "vue";
+import {Instant} from "../helpers/time/Instant";
 
 const cellIdExtractor = /battery([0-9]+)\/Tower([0-9]+)Module([0-9]+)Cell([0-9]+)Voltage/;
 const moduleTemperatureIdExtractor = /battery([0-9]+)\/Tower([0-9]+)Module([0-9]+)TemperatureSensor([0-9]+)/;
@@ -326,6 +335,43 @@ export const useOpenEms = defineStore("openems", () => {
             .sort((a, b) => a.id - b.id);
     }
 
+    const getSystemUpdateState = async () => {
+        const response: string = await callJsonApi('getSystemUpdateState');
+        console.log(response);
+    }
+
+    const queryHistoricEnergyPerPeriod = async (
+        fromDate: Instant, toDate: Instant, timezone: string, channels: string[],
+        resolutionValue: number, resolutionUnit: string
+    ): Promise<HistoricTimeseries> => {
+        return await callJsonApi('queryHistoricTimeseriesEnergyPerPeriod', {
+            fromDate: fromDate.format("YYYY-MM-DD"),
+            toDate: toDate.format("YYYY-MM-DD"),
+            timezone,
+            channels,
+            resolution: {
+                value: resolutionValue,
+                unit: resolutionUnit,
+            },
+        });
+    }
+
+    const queryHistoricData = async (
+        fromDate: Instant, toDate: Instant, timezone: string, channels: string[],
+        resolutionValue: number, resolutionUnit: string
+    ): Promise<HistoricTimeseries> => {
+        return await callJsonApi('queryHistoricTimeseriesData', {
+            fromDate: fromDate.format("YYYY-MM-DD"),
+            toDate: toDate.format("YYYY-MM-DD"),
+            timezone,
+            channels,
+            resolution: {
+                value: resolutionValue,
+                unit: resolutionUnit,
+            },
+        });
+    }
+
     return {
         isConfigured,
         isReady,
@@ -341,5 +387,8 @@ export const useOpenEms = defineStore("openems", () => {
         readComponentProperty,
         readBatteries,
         readPhotovoltaicPlanes,
+        getSystemUpdateState,
+        queryHistoricEnergyPerPeriod,
+        queryHistoricData
     };
 });

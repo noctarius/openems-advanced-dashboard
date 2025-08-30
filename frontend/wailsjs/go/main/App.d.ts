@@ -3,7 +3,6 @@
 import {openems} from '../models';
 import {solarforecast} from '../models';
 import {config} from '../models';
-import {time} from '../models';
 
 export function CallOpenEmsApi(arg1:string,arg2:string,arg3:any):Promise<openems.Response>;
 
@@ -12,11 +11,5 @@ export function GetClearSkyForecast():Promise<Array<solarforecast.Forecast>>;
 export function GetConfig():Promise<config.Config>;
 
 export function GetSolarForecast():Promise<Array<solarforecast.Forecast>>;
-
-export function GetSystemUpdateState():Promise<any>;
-
-export function QueryHistoricData(arg1:time.Time,arg2:time.Time,arg3:string,arg4:Array<string>,arg5:number,arg6:string):Promise<openems.HistoricTimeseries>;
-
-export function QueryHistoricEnergyPerPeriod(arg1:time.Time,arg2:time.Time,arg3:string,arg4:Array<string>,arg5:number,arg6:string):Promise<openems.HistoricTimeseries>;
 
 export function SaveConfig(arg1:config.Config):Promise<void>;

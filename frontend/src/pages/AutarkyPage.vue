@@ -27,10 +27,12 @@
 <script setup lang="ts">
 import MainComponent from "../components/MainComponent.vue";
 import LineChartComponent from "../components/LineChartComponent.vue";
-import {QueryHistoricData,} from "../../wailsjs/go/main/App";
 import {computed, ref} from "vue";
 import {LOCAL, UTC} from "../helpers/time/Timezone";
 import {convertPercent} from "../helpers/conversions";
+import {useOpenEms} from "../openems";
+
+const openEms = useOpenEms();
 
 const autarkyData = ref<number[][]>([]);
 const loading = ref<boolean>(true);
@@ -45,8 +47,8 @@ const autarkySeries = computed(() => {
 });
 
 const loadForecasts = async () => {
-  const today = LOCAL.now().set({hour: 0, minute: 0, second: 0, millisecond: 0}).formatIsoTime()
-  const timeseries = await QueryHistoricData(
+  const today = LOCAL.now().set({hour: 0, minute: 0, second: 0, millisecond: 0});
+  const timeseries = await openEms.queryHistoricData(
       today, today, LOCAL.toString(),
       [
         "_sum/ConsumptionActivePower",

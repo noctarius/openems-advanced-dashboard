@@ -18,18 +18,6 @@ export function GetSolarForecast() {
   return window['go']['main']['App']['GetSolarForecast']();
 }
 
-export function GetSystemUpdateState() {
-  return window['go']['main']['App']['GetSystemUpdateState']();
-}
-
-export function QueryHistoricData(arg1, arg2, arg3, arg4, arg5, arg6) {
-  return window['go']['main']['App']['QueryHistoricData'](arg1, arg2, arg3, arg4, arg5, arg6);
-}
-
-export function QueryHistoricEnergyPerPeriod(arg1, arg2, arg3, arg4, arg5, arg6) {
-  return window['go']['main']['App']['QueryHistoricEnergyPerPeriod'](arg1, arg2, arg3, arg4, arg5, arg6);
-}
-
 export function SaveConfig(arg1) {
   return window['go']['main']['App']['SaveConfig'](arg1);
 }

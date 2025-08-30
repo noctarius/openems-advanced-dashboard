@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, onUnmounted, ref} from "vue";
+import {computed, onUnmounted, ref, watch} from "vue";
 import {convertVolts, convertWatts, covertHertz, limitTextLength, powerChannelStatus} from "../helpers/conversions";
 import MainComponent from "../components/MainComponent.vue";
 import StatusCard, {NodeDefinition} from "../components/StatusCard.vue";
@@ -358,6 +358,10 @@ const update = async () => {
 };
 
 update();
+
+watch(openEms, () => {
+  openEms.getSystemUpdateState()
+})
 
 const cancel = setInterval(update, 1000);
 

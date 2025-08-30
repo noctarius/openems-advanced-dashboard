@@ -60,7 +60,7 @@
 <script setup lang="ts">
 import MainComponent from "../components/MainComponent.vue";
 import LineChartComponent from "../components/LineChartComponent.vue";
-import {GetClearSkyForecast, GetSolarForecast, QueryHistoricData,} from "../../wailsjs/go/main/App";
+import {GetClearSkyForecast, GetSolarForecast} from "../../wailsjs/go/main/App";
 import {filterAndExpandForecastSeries} from "../helpers/series";
 import {computed, onUnmounted, ref} from "vue";
 import {solarforecast} from "../../wailsjs/go/models";
@@ -68,6 +68,9 @@ import {convertWatts} from "../helpers/conversions";
 import {LOCAL, UTC} from "../helpers/time/Timezone";
 import {connect, disconnect} from "echarts/core";
 import Forecast = solarforecast.Forecast;
+import {useOpenEms} from "../openems";
+
+const openEms = useOpenEms();
 
 const weatherForecasts = ref<Forecast[]>([]);
 const clearSkyForecast = ref<Forecast[]>([]);
@@ -114,8 +117,8 @@ const loadForecasts = async () => {
   const actual = await GetSolarForecast();
   const clearSky = await GetClearSkyForecast();
 
-  const today = LOCAL.now().set({hour: 0, minute: 0, second: 0, millisecond: 0}).formatIsoTime()
-  const timeseries = await QueryHistoricData(
+  const today = LOCAL.now().set({hour: 0, minute: 0, second: 0, millisecond: 0})
+  const timeseries = await openEms.queryHistoricData(
       today, today, LOCAL.toString(),
       [
         "charger10/ActualPower",
@@ -133,7 +136,7 @@ const loadForecasts = async () => {
         .sort((a, b) => a - b)
         .filter(timestamp => timestamp <= now)
         .map((timestamp, index) => {
-          const dataPoint = timeseries.data[key][index];
+          const dataPoint = timeseries.data[key][index] || 0;
           return [timestamp, Math.round(dataPoint * 100) / 100]
         });
   })

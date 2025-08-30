@@ -12,7 +12,6 @@
 </template>
 
 <script setup lang="ts">
-
 export interface LinkProps {
   title: string;
   caption?: string;
@@ -21,11 +20,11 @@ export interface LinkProps {
 }
 
 withDefaults(defineProps<LinkProps>(), {
-  caption: '',
-  link: '#',
-  icon: '',
+  caption: "",
+  link: "#",
+  icon: "",
   active: false,
 });
 
-defineEmits(['click']);
+defineEmits(["click"]);
 </script>

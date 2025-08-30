@@ -1,34 +1,25 @@
 <template>
   <div
-      :key="module.id"
-      class="module"
-  >
-    <span
-        class="title"
-    >
-      Module {{ module.id + 1 }}
-    </span>
-    <table
-        style="margin-bottom: 5px; width: 450px"
-    >
+    :key="module.id"
+    class="module">
+    <span class="title"> Module {{ module.id + 1 }} </span>
+    <table style="margin-bottom: 5px; width: 450px">
       <tr
-          v-for="(row, rowIndex) in chunkedCells"
-          :key="rowIndex"
-      >
+        v-for="(row, rowIndex) in chunkedCells"
+        :key="rowIndex">
         <cell-component
-            v-for="(cell, cellIndex) in row"
-            :key="cellIndex"
-            :cell="cell"
-            :cells="module.cells"
-        />
+          v-for="(cell, cellIndex) in row"
+          :key="cellIndex"
+          :cell="cell"
+          :cells="module.cells" />
       </tr>
     </table>
   </div>
 </template>
 
 <script setup lang="ts">
-import {computed} from 'vue';
-import CellComponent from './CellComponent.vue';
+import {computed} from "vue";
+import CellComponent from "./CellComponent.vue";
 import {Cell, Module} from "../openems/types";
 
 const props = defineProps<{

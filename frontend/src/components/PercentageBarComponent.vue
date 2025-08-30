@@ -1,14 +1,19 @@
 <template>
   <v-progress-linear
-      :model-value="value"
-      color="primary"
-      height="25"
-  >
-    <template
-        #default="{ value }"
-    >
-      <span class="back" ref="backRef">{{ valueString }}</span>
-      <span class="front" ref="frontRef">{{ valueString }}</span>
+    :model-value="value"
+    color="primary"
+    height="25">
+    <template #default="{value}">
+      <span
+        class="back"
+        ref="backRef"
+        >{{ valueString }}</span
+      >
+      <span
+        class="front"
+        ref="frontRef"
+        >{{ valueString }}</span
+      >
     </template>
   </v-progress-linear>
 </template>
@@ -16,7 +21,7 @@
 <script setup lang="ts">
 import {computed, ref, watch} from "vue";
 
-const props = defineProps<{ value: number }>()
+const props = defineProps<{value: number}>();
 const frontRef = ref<HTMLSpanElement | null>(null);
 const backRef = ref<HTMLSpanElement | null>(null);
 
@@ -29,7 +34,7 @@ const adjustProgressValue = () => {
   if (backRef.value) {
     backRef.value.style.clipPath = `inset(0 ${100 - props.value}% 0 0)`;
   }
-}
+};
 
 // Initial update
 adjustProgressValue();

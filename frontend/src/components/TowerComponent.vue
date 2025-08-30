@@ -1,16 +1,12 @@
 <template>
-  <div
-      class="module-tower"
-  >
+  <div class="module-tower">
     <slot
-        v-for="module in tower.modules"
-        :key="module.id"
-        :module="module"
-    />
+      v-for="module in tower.modules"
+      :key="module.id"
+      :module="module" />
     <div
-        class="title"
-        style="width: 100%; text-align: center"
-    >
+      class="title"
+      style="width: 100%; text-align: center">
       Battery Tower {{ tower.id + 1 }}
     </div>
   </div>

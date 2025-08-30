@@ -1,13 +1,10 @@
 <template>
-  <div
-      style="width: 100%"
-  >
+  <div style="width: 100%">
     <h2>{{ title }}</h2>
   </div>
   <div
-      ref="content"
-      class="overflow-y-auto overflow-x-hidden"
-  >
+    ref="content"
+    class="overflow-y-auto overflow-x-hidden">
     <slot></slot>
   </div>
 </template>
@@ -17,7 +14,7 @@ import {onMounted, ref} from "vue";
 
 defineProps<{
   title: string;
-}>()
+}>();
 
 const content = ref<HTMLDivElement | null>(null);
 onMounted(() => {
@@ -31,5 +28,4 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

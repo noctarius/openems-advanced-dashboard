@@ -1,25 +1,19 @@
 <template>
   <main-component title="Overview">
-    <v-row
-        style="width: 100%;"
-    >
+    <v-row style="width: 100%">
       <v-col
-          cols="6"
-          v-for="card in cards"
-      >
-        <v-card
-            :title="typeof card.title === 'function' ? card.title() : card.title"
-        >
+        cols="6"
+        v-for="card in cards">
+        <v-card :title="typeof card.title === 'function' ? card.title() : card.title">
           <v-skeleton-loader
-              :loading="openEms.isLoading"
-              height="240"
-              type="image, list-item-two-line"
-          >
+            :loading="openEms.isLoading"
+            height="240"
+            type="image, list-item-two-line">
             <v-container>
               <status-card
-                  v-for="item in card.items"
-                  :title="item.title"
-                  :value="item.value"/>
+                v-for="item in card.items"
+                :title="item.title"
+                :value="item.value" />
             </v-container>
           </v-skeleton-loader>
         </v-card>
@@ -40,7 +34,7 @@ import {useOpenEms} from "../openems";
 
 interface Card {
   title: string | (() => string);
-  items: CardItem[]
+  items: CardItem[];
 }
 
 interface CardItem {
@@ -66,182 +60,203 @@ const frequencyPhases = ref<(ChannelItem | undefined)[][]>([]);
 const componentsStore = useComponentsStore();
 const openEms = useOpenEms();
 
-const meters = computed<string[]>(() =>
-    componentsStore.selectMeters
-);
+const meters = computed<string[]>(() => componentsStore.selectMeters);
 
 const meterNames = computed<string[]>(() =>
-    meters.value
-        .map(meter => openEms.getComponent(meter)?.alias)
-        .filter(name => name !== undefined)
+  meters.value.map(meter => openEms.getComponent(meter)?.alias).filter(name => name !== undefined),
 );
 
-const chargers = computed<string[]>(() =>
-    componentsStore.selectChargers
-);
+const chargers = computed<string[]>(() => componentsStore.selectChargers);
 
 const chargerNames = computed<string[]>(() =>
-    chargers.value
-        .map(charger => openEms.getComponent(charger)?.alias)
-        .filter(name => name !== undefined)
+  chargers.value.map(charger => openEms.getComponent(charger)?.alias).filter(name => name !== undefined),
 );
 
-const secondaryMeters = computed<string[]>(() =>
-    meterNames.value.filter(name => name !== "meter0")
-)
-
+const secondaryMeters = computed<string[]>(() => meterNames.value.filter(name => name !== "meter0"));
 
 const cards = computed<Card[]>(() => {
-  return [{
-    title: "System Overview",
-    items: [{
-      title: "State of Charge",
-      value() {
-        return {
-          type: PercentageBarComponent,
-          props: {
-            value: stateOfCharge.value,
-          }
-        }
-      }
-    }, {
-      title: "System State",
-      value() {
-        return systemState.value;
-      }
-    }]
-  }, {
-    title: "Chargers (Strings)",
-    items: chargerNames.value.map((_, index) => {
-      return {
-        title() {
-          return chargerNames.value[index];
+  return [
+    {
+      title: "System Overview",
+      items: [
+        {
+          title: "State of Charge",
+          value() {
+            return {
+              type: PercentageBarComponent,
+              props: {
+                value: stateOfCharge.value,
+              },
+            };
+          },
         },
-        value() {
-          return convertWatts(chargerPowers.value[index]) || "?";
-        }
-      }
-    })
-  }, {
-    title: "Production and Consumption",
-    items: [{
-      title: "Current Production",
-      value() {
-        return convertWatts(productionPower.value) || "?";
-      }
-    }, {
-      title: "Current Consumption",
-      value() {
-        return convertWatts(consumptionPower.value) || "?";
-      }
-    }, {
-      title: "Direct Consumption",
-      value() {
-        return convertWatts(directConsumptionPower.value) || "?";
-      }
-    }, {
-      title: "Battery Status",
-      value() {
-        const status = powerChannelStatus(chargeDischargePower.value?.value || 0, "", "(charging)", "(discharging)");
-        return `${convertWatts(chargeDischargePower.value)} ${status}`;
-      }
-    }, {
-      title: "Grid Active Power",
-      value() {
-        const sell = gridSellPower.value?.value;
-        const buy = gridBuyPower.value?.value;
-        const power = sell || -buy;
-        const status = powerChannelStatus(power || 0, "", "(buying)", "(selling)");
-        return `${convertWatts({value: power, unit: "W"} as any)} ${status}`;
-      }
+        {
+          title: "System State",
+          value() {
+            return systemState.value;
+          },
+        },
+      ],
     },
-      ...secondaryMeters.value.map((_, index) => {
-        return {
-          title: () => meterNames.value[index],
-          value: () => `${convertWatts(meterPowers.value[index])}`
-        }
-      })
-    ]
-  }, {
-    title: "Independence",
-    items: [{
-      title: "Autarchy",
-      value() {
-        const consumption = consumptionPower.value?.value || 0;
-        const sell = gridSellPower.value?.value;
-        const buy = gridBuyPower.value?.value;
-        const gridPower = sell || -buy;
-        const buying = gridPower < 0 ? -gridPower : 0;
-        const autarchy = 100 - (consumption > 0 ? Math.round(buying / consumption * 100) : 0);
-        return {
-          type: PercentageBarComponent,
-          props: {
-            value: autarchy,
-          }
-        }
-      }
-    }, {
-      title: "Self-Consumption",
-      value() {
-        const production = productionPower.value?.value || 0;
-        const directConsumption = directConsumptionPower.value?.value || 0;
-        const fullConsumption = directConsumption === 0 ? consumptionPower.value?.value || 0 : 0;
-        const chargeDischarge = chargeDischargePower.value?.value || 0;
-        const charging = chargeDischarge < 0 ? -chargeDischarge : 0;
-        const discharging = chargeDischarge > 0 ? chargeDischarge : 0;
-        const usablePower = production + discharging;
-        const consumption = charging + directConsumption + fullConsumption;
-        const selfConsumption = usablePower > 0 ? Math.round(consumption / usablePower * 100) : 0;
-        return {
-          type: PercentageBarComponent,
-          props: {
-            value: selfConsumption > 100 ? 100 : selfConsumption,
-          }
-        }
-      }
-    }]
-  }, {
-    title: "Power by Phase",
-    items: [
-      ...!productionPhases.value ? [] : productionPhases.value.map((_, index) => {
+    {
+      title: "Chargers (Strings)",
+      items: chargerNames.value.map((_, index) => {
         return {
           title() {
-            return `Production Phase ${index + 1}`;
+            return chargerNames.value[index];
           },
           value() {
-            return `${convertWatts(productionPhases.value[index])}`;
-          }
-        }
+            return convertWatts(chargerPowers.value[index]) || "?";
+          },
+        };
       }),
-      ...!consumptionPhases.value ? [] : consumptionPhases.value.map((_, index) => {
-        return {
-          title() {
-            return `Consumption Phase ${index + 1}`;
-          },
+    },
+    {
+      title: "Production and Consumption",
+      items: [
+        {
+          title: "Current Production",
           value() {
-            const value = consumptionPhases.value[index];
-            const status = powerChannelStatus(value?.value, "", "(selling)", "(buying)");
-            return `${convertWatts(value)} ${status}`;
-          }
-        }
-      })]
-  }, {
-    title: "Phase Information",
-    items: [
-      ...!meters.value ? [] : meters.value.flatMap((_, index) => {
-        return !voltagePhases.value[index] ? [] : voltagePhases.value[index].map((_, phaseIndex) => {
+            return convertWatts(productionPower.value) || "?";
+          },
+        },
+        {
+          title: "Current Consumption",
+          value() {
+            return convertWatts(consumptionPower.value) || "?";
+          },
+        },
+        {
+          title: "Direct Consumption",
+          value() {
+            return convertWatts(directConsumptionPower.value) || "?";
+          },
+        },
+        {
+          title: "Battery Status",
+          value() {
+            const status = powerChannelStatus(
+              chargeDischargePower.value?.value || 0,
+              "",
+              "(charging)",
+              "(discharging)",
+            );
+            return `${convertWatts(chargeDischargePower.value)} ${status}`;
+          },
+        },
+        {
+          title: "Grid Active Power",
+          value() {
+            const sell = gridSellPower.value?.value;
+            const buy = gridBuyPower.value?.value;
+            const power = sell || -buy;
+            const status = powerChannelStatus(power || 0, "", "(buying)", "(selling)");
+            return `${convertWatts({value: power, unit: "W"} as any)} ${status}`;
+          },
+        },
+        ...secondaryMeters.value.map((_, index) => {
           return {
-            title: () => `${limitTextLength(meterNames.value[index], 15)} L${phaseIndex + 1}`,
-            value: () => {
-              const voltages = voltagePhases.value[index];
-              const frequencies = frequencyPhases.value[index];
-              return `${convertVolts(voltages[index]) || `?`} (${covertHertz(frequencies[index]) || '?'})`;
-            }
+            title: () => meterNames.value[index],
+            value: () => `${convertWatts(meterPowers.value[index])}`,
           };
-        })
-      })
-    ]
-  }];
+        }),
+      ],
+    },
+    {
+      title: "Independence",
+      items: [
+        {
+          title: "Autarchy",
+          value() {
+            const consumption = consumptionPower.value?.value || 0;
+            const sell = gridSellPower.value?.value;
+            const buy = gridBuyPower.value?.value;
+            const gridPower = sell || -buy;
+            const buying = gridPower < 0 ? -gridPower : 0;
+            const autarchy = 100 - (consumption > 0 ? Math.round((buying / consumption) * 100) : 0);
+            return {
+              type: PercentageBarComponent,
+              props: {
+                value: autarchy,
+              },
+            };
+          },
+        },
+        {
+          title: "Self-Consumption",
+          value() {
+            const production = productionPower.value?.value || 0;
+            const directConsumption = directConsumptionPower.value?.value || 0;
+            const fullConsumption = directConsumption === 0 ? consumptionPower.value?.value || 0 : 0;
+            const chargeDischarge = chargeDischargePower.value?.value || 0;
+            const charging = chargeDischarge < 0 ? -chargeDischarge : 0;
+            const discharging = chargeDischarge > 0 ? chargeDischarge : 0;
+            const usablePower = production + discharging;
+            const consumption = charging + directConsumption + fullConsumption;
+            const selfConsumption = usablePower > 0 ? Math.round((consumption / usablePower) * 100) : 0;
+            return {
+              type: PercentageBarComponent,
+              props: {
+                value: selfConsumption > 100 ? 100 : selfConsumption,
+              },
+            };
+          },
+        },
+      ],
+    },
+    {
+      title: "Power by Phase",
+      items: [
+        ...(!productionPhases.value
+          ? []
+          : productionPhases.value.map((_, index) => {
+              return {
+                title() {
+                  return `Production Phase ${index + 1}`;
+                },
+                value() {
+                  return `${convertWatts(productionPhases.value[index])}`;
+                },
+              };
+            })),
+        ...(!consumptionPhases.value
+          ? []
+          : consumptionPhases.value.map((_, index) => {
+              return {
+                title() {
+                  return `Consumption Phase ${index + 1}`;
+                },
+                value() {
+                  const value = consumptionPhases.value[index];
+                  const status = powerChannelStatus(value?.value, "", "(selling)", "(buying)");
+                  return `${convertWatts(value)} ${status}`;
+                },
+              };
+            })),
+      ],
+    },
+    {
+      title: "Phase Information",
+      items: [
+        ...(!meters.value
+          ? []
+          : meters.value.flatMap((_, index) => {
+              return !voltagePhases.value[index]
+                ? []
+                : voltagePhases.value[index].map((_, phaseIndex) => {
+                    return {
+                      title: () => `${limitTextLength(meterNames.value[index], 15)} L${phaseIndex + 1}`,
+                      value: () => {
+                        const voltages = voltagePhases.value[index];
+                        const frequencies = frequencyPhases.value[index];
+                        return `${convertVolts(voltages[index]) || `?`} (${covertHertz(frequencies[index]) || "?"})`;
+                      },
+                    };
+                  });
+            })),
+      ],
+    },
+  ];
 });
 
 const update = async () => {
@@ -323,7 +338,9 @@ const update = async () => {
 
     const gridOptimizedCharge = openEms.readComponent("ctrlGridOptimizedCharge0");
     if (gridOptimizedCharge) {
-      const limitState = gridOptimizedCharge.find(item => item.address === "ctrlGridOptimizedCharge0/SellToGridLimitState");
+      const limitState = gridOptimizedCharge.find(
+        item => item.address === "ctrlGridOptimizedCharge0/SellToGridLimitState",
+      );
       if (limitState) {
         systemState.value = sellToGridLimitStateToString(limitState.value);
       }
@@ -360,8 +377,8 @@ const update = async () => {
 update();
 
 watch(openEms, () => {
-  openEms.getSystemUpdateState()
-})
+  openEms.getSystemUpdateState();
+});
 
 const cancel = setInterval(update, 1000);
 

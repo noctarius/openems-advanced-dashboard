@@ -59,7 +59,7 @@ const cards = computed<Card[]>(() => {
 
       const currentProperty = trackerProperties.find(prop => prop.address.endsWith("I"));
       const powerProperty = trackerProperties.find(prop => prop.address.endsWith("P"));
-      const currentValue =convertCurrentValue(currentProperty);
+      const currentValue = convertCurrentValue(currentProperty);
       const powerValue = convertWattsValue(powerProperty) * 1000;
       const voltage = currentValue !== 0 ? powerValue / currentValue : 0;
 

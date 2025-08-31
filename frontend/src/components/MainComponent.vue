@@ -13,7 +13,7 @@
 import {onMounted, ref} from "vue";
 
 defineProps<{
-  title: string
+  title: string;
 }>();
 
 const content = ref<HTMLDivElement | null>(null);

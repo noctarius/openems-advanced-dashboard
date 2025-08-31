@@ -1,6 +1,6 @@
-import { solarforecast } from "../../wailsjs/go/models";
-import { Instant } from "./time/Instant";
-import { LOCAL } from "./time/Timezone.js";
+import {solarforecast} from "../../wailsjs/go/models";
+import {Instant} from "./time/Instant";
+import {LOCAL} from "./time/Timezone.js";
 import ForecastEntry = solarforecast.ForecastEntry;
 
 export function filterAndExpandForecastSeries(forecastEntries: ForecastEntry[], basis: Instant = LOCAL.now()) {
@@ -15,7 +15,8 @@ export function filterAndExpandForecastSeries(forecastEntries: ForecastEntry[], 
     const time = beginOfDay.add(15 * index, "minutes").toTimestamp();
     const record = filtered.find(entry => entry.time === time);
     return {
-      Time: time, Value: record ? record.value : 0,
+      Time: time,
+      Value: record ? record.value : 0,
     };
   });
 

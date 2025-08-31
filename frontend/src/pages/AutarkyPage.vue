@@ -6,11 +6,11 @@
           <v-row>
             <v-col cols="12">
               <line-chart-component
-                  :series="autarkySeries"
-                  :loading="loading"
-                  :converter="convertPercent"
-                  style="height: 390px"
-                  group="forecast"/>
+                :series="autarkySeries"
+                :loading="loading"
+                :converter="convertPercent"
+                style="height: 390px"
+                group="forecast" />
             </v-col>
           </v-row>
         </v-container>
@@ -47,27 +47,27 @@ const loadForecasts = async () => {
   try {
     const today = LOCAL.now().set({hour: 0, minute: 0, second: 0, millisecond: 0});
     const timeseries = await openEms.queryHistoricData(
-        today,
-        today,
-        LOCAL.toString(),
-        ["_sum/ConsumptionActivePower", "_sum/GridToConsumptionPower"],
-        1,
-        "Minutes",
+      today,
+      today,
+      LOCAL.toString(),
+      ["_sum/ConsumptionActivePower", "_sum/GridToConsumptionPower"],
+      1,
+      "Minutes",
     );
 
     const now = LOCAL.now().toTimestamp() * 1000;
     const autarky = timeseries.timestamps
-        .map(timestamp => {
-          return UTC.parse(timestamp).toTimestamp() * 1000;
-        })
-        .sort((a, b) => a - b)
-        .filter(timestamp => timestamp <= now)
-        .map((timestamp, index) => {
-          const totalConsumption = timeseries.data["_sum/ConsumptionActivePower"][index] || 0;
-          const gridConsumption = timeseries.data["_sum/GridToConsumptionPower"][index] || 0;
-          const basis = totalConsumption === 0 ? 0 : gridConsumption / totalConsumption;
-          return [timestamp, Math.round((1 - basis) * 10000) / 10000];
-        });
+      .map(timestamp => {
+        return UTC.parse(timestamp).toTimestamp() * 1000;
+      })
+      .sort((a, b) => a - b)
+      .filter(timestamp => timestamp <= now)
+      .map((timestamp, index) => {
+        const totalConsumption = timeseries.data["_sum/ConsumptionActivePower"][index] || 0;
+        const gridConsumption = timeseries.data["_sum/GridToConsumptionPower"][index] || 0;
+        const basis = totalConsumption === 0 ? 0 : gridConsumption / totalConsumption;
+        return [timestamp, Math.round((1 - basis) * 10000) / 10000];
+      });
 
     autarkyData.value = autarky;
   } catch (e) {

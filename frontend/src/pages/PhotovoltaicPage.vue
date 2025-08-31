@@ -2,20 +2,18 @@
   <main-component title="Overview">
     <v-row style="width: 100%">
       <v-col
-          cols="6"
-          v-for="card in cards">
-        <v-card
-            :title="typeof card.title === 'function' ? card.title() : card.title"
-        >
+        cols="6"
+        v-for="card in cards">
+        <v-card :title="typeof card.title === 'function' ? card.title() : card.title">
           <v-skeleton-loader
-              :loading="openEms.isLoading"
-              height="240"
-              type="image, list-item-two-line">
+            :loading="openEms.isLoading"
+            height="240"
+            type="image, list-item-two-line">
             <v-container>
               <status-card
-                  v-for="item in card.items"
-                  :title="item.title"
-                  :value="item.value"/>
+                v-for="item in card.items"
+                :title="item.title"
+                :value="item.value" />
             </v-container>
           </v-skeleton-loader>
         </v-card>
@@ -51,34 +49,39 @@ const cards = computed<Card[]>(() => {
 
   return batteryInverters.flatMap(inverter => {
     const availableTrackerProperties = openEms.selectComponentProperties(inverter, "Mppt");
-    const requiredPlanes = photovoltaicPlanes.filter(plane => plane.inverterName === inverter)
+    const requiredPlanes = photovoltaicPlanes.filter(plane => plane.inverterName === inverter);
 
     return requiredPlanes.map(plane => {
       const propertyBaseAddress = `${inverter}/Mppt${plane.mpptPort}`.toLowerCase();
-      const trackerProperties = availableTrackerProperties.filter(
-          prop => prop.address.toLowerCase().startsWith(propertyBaseAddress)
+      const trackerProperties = availableTrackerProperties.filter(prop =>
+        prop.address.toLowerCase().startsWith(propertyBaseAddress),
       );
 
       const ampereProperty = trackerProperties.find(prop => prop.address.endsWith("I"));
       const powerProperty = trackerProperties.find(prop => prop.address.endsWith("P"));
-      const voltage = convertWattsValue(powerProperty) * 1000 / convertCurrentValue(ampereProperty);
+      const voltage = (convertWattsValue(powerProperty) * 1000) / convertCurrentValue(ampereProperty);
 
       return {
         title: `${plane.alias} (${plane.mpptPortName}, ${plane.pvPortName})`,
-        items: [{
-          title: "Max Power",
-          value: `${convertWatts(plane.maxPower)}p`
-        }, {
-          title: "Actual Power",
-          value: `${convertWatts(powerProperty?.value) || "?"}`
-        }, {
-          title: "Actual Current",
-          value: `${convertCurrent(ampereProperty?.value) || "?"}`
-        }, {
-          title: "Actual Voltage",
-          value: `${voltage ? voltage.toFixed(2) + ' V' : "?"}`
-        }]
-      }
+        items: [
+          {
+            title: "Max Power",
+            value: `${convertWatts(plane.maxPower)}p`,
+          },
+          {
+            title: "Actual Power",
+            value: `${convertWatts(powerProperty?.value) || "?"}`,
+          },
+          {
+            title: "Actual Current",
+            value: `${convertCurrent(ampereProperty?.value) || "?"}`,
+          },
+          {
+            title: "Actual Voltage",
+            value: `${voltage ? voltage.toFixed(2) + " V" : "?"}`,
+          },
+        ],
+      };
     });
   });
 });

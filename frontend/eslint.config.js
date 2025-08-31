@@ -8,10 +8,7 @@ export default tseslint.config(
     ignores: ["dist", "wailsjs"],
   },
   {
-    extends: [
-      js.configs.recommended,
-      ...tseslint.configs.recommended,
-    ],
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{js,ts,tsx}"],
     languageOptions: {
       ecmaVersion: 2020,
@@ -31,5 +28,5 @@ export default tseslint.config(
       ],
     },
   },
-  eslintConfigPrettier
+  eslintConfigPrettier,
 );

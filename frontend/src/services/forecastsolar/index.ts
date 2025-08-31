@@ -1,16 +1,16 @@
-import { defineStore } from "pinia";
-import { GetClearSkyForecast } from "../../../wailsjs/go/main/App.js";
-import { GetSolarForecast } from "../../../wailsjs/go/main/App.js";
-import { IsSolarForecastInitialized } from "../../../wailsjs/go/main/App.js";
-import { SetSolarForecastConfig } from "../../../wailsjs/go/main/App.js";
-import { solarforecast } from "../../../wailsjs/go/models.js";
-import { LOCAL } from "../../helpers/time/Timezone.js";
-import { useConfigStore } from "../config/index.js";
-import { useOpenEms } from "../openems/index.js";
-import type { Forecast } from "./types.js";
+import {defineStore} from "pinia";
+import {GetClearSkyForecast} from "../../../wailsjs/go/main/App.js";
+import {GetSolarForecast} from "../../../wailsjs/go/main/App.js";
+import {IsSolarForecastInitialized} from "../../../wailsjs/go/main/App.js";
+import {SetSolarForecastConfig} from "../../../wailsjs/go/main/App.js";
+import {solarforecast} from "../../../wailsjs/go/models.js";
+import {LOCAL} from "../../helpers/time/Timezone.js";
+import {useConfigStore} from "../config/index.js";
+import {useOpenEms} from "../openems/index.js";
+import type {Forecast} from "./types.js";
 
-const min = (a: number, b: number) => a < b ? a : b;
-const max = (a: number, b: number) => a > b ? a : b;
+const min = (a: number, b: number) => (a < b ? a : b);
+const max = (a: number, b: number) => (a > b ? a : b);
 
 export const useForecastSolar = defineStore("forecast-solar", () => {
   const openEms = useOpenEms();
@@ -24,8 +24,15 @@ export const useForecastSolar = defineStore("forecast-solar", () => {
     }
 
     const today = now.startOf("day");
-    const series = await openEms.queryHistoricData(today, today, LOCAL.toString(), ["_sum/ProductionDcActiveEnergy"], 60, "Minutes");
-    const dataSeries = series.data[ "_sum/ProductionDcActiveEnergy" ] || [];
+    const series = await openEms.queryHistoricData(
+      today,
+      today,
+      LOCAL.toString(),
+      ["_sum/ProductionDcActiveEnergy"],
+      60,
+      "Minutes",
+    );
+    const dataSeries = series.data["_sum/ProductionDcActiveEnergy"] || [];
     const minimum = dataSeries.reduce((acc: number, cur) => min(acc, cur || acc), Number.MAX_SAFE_INTEGER);
     const maximum = dataSeries.reduce((acc: number, cur) => max(acc, cur || acc), 0);
     return maximum - minimum;
@@ -66,7 +73,7 @@ export const useForecastSolar = defineStore("forecast-solar", () => {
 
   const queryWeatherBasedSolarForecast = async (): Promise<Forecast[]> => {
     const production = await productionToday();
-    return  await GetSolarForecast(production);
+    return await GetSolarForecast(production);
   };
 
   const queryClearSkySolarForecast = async (): Promise<Forecast[]> => {
@@ -75,6 +82,10 @@ export const useForecastSolar = defineStore("forecast-solar", () => {
   };
 
   return {
-    initialize, updateConfiguration, isReady, queryWeatherBasedSolarForecast, queryClearSkySolarForecast
+    initialize,
+    updateConfiguration,
+    isReady,
+    queryWeatherBasedSolarForecast,
+    queryClearSkySolarForecast,
   };
 });

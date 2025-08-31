@@ -1,6 +1,5 @@
 <template>
-  <slot :model="model">
-  </slot>
+  <slot :model="model"> </slot>
 </template>
 
 <script setup lang="ts">

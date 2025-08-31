@@ -16,7 +16,7 @@
 import {Tower} from "../services/openems/types";
 
 defineProps<{
-  tower: Tower
+  tower: Tower;
 }>();
 </script>
 

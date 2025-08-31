@@ -43,7 +43,7 @@ const routes: RouteRecordRaw[] = [
         name: "MPPT Trackers",
         component: PhotovoltaicPage,
         meta: {icon: "mdi-solar-power-variant-outline"},
-      }
+      },
     ],
   },
 

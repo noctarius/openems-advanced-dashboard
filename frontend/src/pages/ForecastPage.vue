@@ -5,45 +5,45 @@
         <v-container style="height: 100%">
           <v-row>
             <v-col
-                cols="1"
-                style="writing-mode: vertical-rl; transform: rotate(180deg); align-content: flex-end">
-              Weather-based Forecast<br/>and Production
+              cols="1"
+              style="writing-mode: vertical-rl; transform: rotate(180deg); align-content: flex-end">
+              Weather-based Forecast<br />and Production
             </v-col>
             <v-col cols="11">
               <line-chart-component
-                  :series="weatherSeries"
-                  :converter="convertWatts"
-                  :loading="loading"
-                  style="height: 390px"
-                  group="forecast"/>
+                :series="weatherSeries"
+                :converter="convertWatts"
+                :loading="loading"
+                style="height: 390px"
+                group="forecast" />
             </v-col>
           </v-row>
           <v-row>
             <v-col
-                cols="1"
-                style="writing-mode: vertical-rl; transform: rotate(180deg); align-content: flex-end">
+              cols="1"
+              style="writing-mode: vertical-rl; transform: rotate(180deg); align-content: flex-end">
               Clear Sky Forecast
             </v-col>
             <v-col cols="11">
               <line-chart-component
-                  :series="clearSkySeries"
-                  :converter="convertWatts"
-                  :loading="loading"
-                  style="height: 390px"
-                  group="forecast"/>
+                :series="clearSkySeries"
+                :converter="convertWatts"
+                :loading="loading"
+                style="height: 390px"
+                group="forecast" />
             </v-col>
           </v-row>
         </v-container>
       </div>
     </main-component>
     <div
-        class="position-absolute bottom-0"
-        style="right: 10px">
+      class="position-absolute bottom-0"
+      style="right: 10px">
       <span class="mr-2">Powered by forecast.solar</span>
       <img
-          src="/assets/images/forecast-solar-logo.png"
-          alt="Powered by Forecast.Solar"
-          style="width: 30px; height: 30px; vertical-align: -7px"/>
+        src="/assets/images/forecast-solar-logo.png"
+        alt="Powered by Forecast.Solar"
+        style="width: 30px; height: 30px; vertical-align: -7px" />
     </div>
   </div>
 </template>
@@ -93,43 +93,43 @@ const weatherSeries = computed(() => {
 });
 
 const clearSkySeries = computed(() =>
-    clearSkyForecast.value.map((forecast, index) => {
-      return {
-        name: `Forecast Plane ${index + 1}`,
-        type: "line",
-        showSymbol: false,
-        data: filterAndExpandForecastSeries(forecast.watts),
-      };
-    }),
+  clearSkyForecast.value.map((forecast, index) => {
+    return {
+      name: `Forecast Plane ${index + 1}`,
+      type: "line",
+      showSymbol: false,
+      data: filterAndExpandForecastSeries(forecast.watts),
+    };
+  }),
 );
 
 const loadForecasts = async () => {
-  if (!await forecastSolar.isReady()) return;
+  if (!(await forecastSolar.isReady())) return;
 
   const actual = await forecastSolar.queryWeatherBasedSolarForecast();
   const clearSky = await forecastSolar.queryClearSkySolarForecast();
 
   const today = LOCAL.now().set({hour: 0, minute: 0, second: 0, millisecond: 0});
   const timeseries = await openEms.queryHistoricData(
-      today,
-      today,
-      LOCAL.toString(),
-      ["charger10/ActualPower", "charger11/ActualPower"],
-      15,
-      "Minutes",
+    today,
+    today,
+    LOCAL.toString(),
+    ["charger10/ActualPower", "charger11/ActualPower"],
+    15,
+    "Minutes",
   );
   const productions = Object.keys(timeseries.data).map(key => {
     const now = LOCAL.now().toTimestamp() * 1000;
     return timeseries.timestamps
-        .map(timestamp => {
-          return UTC.parse(timestamp).toTimestamp() * 1000;
-        })
-        .sort((a, b) => a - b)
-        .filter(timestamp => timestamp <= now)
-        .map((timestamp, index) => {
-          const dataPoint = timeseries.data[key][index] || 0;
-          return [timestamp, Math.round(dataPoint * 100) / 100];
-        });
+      .map(timestamp => {
+        return UTC.parse(timestamp).toTimestamp() * 1000;
+      })
+      .sort((a, b) => a - b)
+      .filter(timestamp => timestamp <= now)
+      .map((timestamp, index) => {
+        const dataPoint = timeseries.data[key][index] || 0;
+        return [timestamp, Math.round(dataPoint * 100) / 100];
+      });
   });
 
   actualProductions.value = productions;

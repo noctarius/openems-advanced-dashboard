@@ -26,8 +26,8 @@ import {computed, ref, watch} from "vue";
 import {Cell} from "../services/openems/types";
 
 const props = defineProps<{
-  cell: Cell
-  cells: Cell[]
+  cell: Cell;
+  cells: Cell[];
 }>();
 
 const value = ref<number>(props.cell.value);

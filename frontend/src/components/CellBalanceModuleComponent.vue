@@ -23,7 +23,7 @@ import CellComponent from "./CellComponent.vue";
 import {Cell, Module} from "../services/openems/types";
 
 const props = defineProps<{
-  module: Module
+  module: Module;
 }>();
 
 const chunkedCells = computed(() => {

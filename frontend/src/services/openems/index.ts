@@ -1,10 +1,16 @@
-import { defineStore } from "pinia";
-import { computed, ref } from "vue";
-import { CallOpenEmsApi } from "../../../wailsjs/go/main/App";
-import { Instant } from "../../helpers/time/Instant";
-import { useComponentsStore } from "../../stores/openems-components-store";
+import {defineStore} from "pinia";
+import {computed, ref} from "vue";
+import {CallOpenEmsApi} from "../../../wailsjs/go/main/App";
+import {Instant} from "../../helpers/time/Instant";
+import {useComponentsStore} from "../../stores/openems-components-store";
 import {
-  Battery, ChannelItem, Component, HistoricTimeseries, Module, ModuleTemperature, PhotovoltaicPlane,
+  Battery,
+  ChannelItem,
+  Component,
+  HistoricTimeseries,
+  Module,
+  ModuleTemperature,
+  PhotovoltaicPlane,
 } from "./types";
 
 const cellIdExtractor = /battery([0-9]+)\/Tower([0-9]+)Module([0-9]+)Cell([0-9]+)Voltage/;
@@ -16,7 +22,7 @@ interface JsonRpcRequest<T> {
   method?: string;
   params?: T;
 
-  [ key: string ]: any;
+  [key: string]: any;
 }
 
 interface JsonRpcResponse<T> {
@@ -39,15 +45,20 @@ const collectModuleTemperatures = (module: Module, moduleTemperatures: ChannelIt
     const match = temperature.address.match(moduleTemperatureIdExtractor);
     if (!match || match.length !== 5) continue;
 
-    const batteryId = parseInt(match[ 1 ]);
-    const towerId = parseInt(match[ 2 ]);
-    const moduleId = parseInt(match[ 3 ]);
-    const temperatureSensorId = parseInt(match[ 4 ]);
+    const batteryId = parseInt(match[1]);
+    const towerId = parseInt(match[2]);
+    const moduleId = parseInt(match[3]);
+    const temperatureSensorId = parseInt(match[4]);
 
     if (module.id !== moduleId) continue;
 
     temperatures.push({
-      id: temperatureSensorId, batteryId, towerId, moduleId, unit: temperature.unit, value: temperature.value,
+      id: temperatureSensorId,
+      batteryId,
+      towerId,
+      moduleId,
+      unit: temperature.unit,
+      value: temperature.value,
     });
   }
   return temperatures.sort((a, b) => a.id - b.id);
@@ -59,25 +70,36 @@ const mapBatteriesTowersModulesCells = (cells: ChannelItem[], moduleTemperatures
     const match = cell.address.match(cellIdExtractor);
     if (!match || match.length !== 5) continue;
 
-    const batteryId = parseInt(match[ 1 ]);
-    const towerId = parseInt(match[ 2 ]);
-    const moduleId = parseInt(match[ 3 ]);
-    const cellId = parseInt(match[ 4 ]);
+    const batteryId = parseInt(match[1]);
+    const towerId = parseInt(match[2]);
+    const moduleId = parseInt(match[3]);
+    const cellId = parseInt(match[4]);
 
-    batteries[ batteryId ] = batteries[ batteryId ] || {
-      id: batteryId, towers: [],
+    batteries[batteryId] = batteries[batteryId] || {
+      id: batteryId,
+      towers: [],
     };
 
-    batteries[ batteryId ].towers[ towerId ] = batteries[ batteryId ].towers[ towerId ] || {
-      id: towerId, batteryId, modules: [],
+    batteries[batteryId].towers[towerId] = batteries[batteryId].towers[towerId] || {
+      id: towerId,
+      batteryId,
+      modules: [],
     };
 
-    batteries[ batteryId ].towers[ towerId ].modules[ moduleId ] = batteries[ batteryId ].towers[ towerId ].modules[ moduleId ] || {
-      id: moduleId, batteryId, towerId, cells: [], temperatures: [],
+    batteries[batteryId].towers[towerId].modules[moduleId] = batteries[batteryId].towers[towerId].modules[moduleId] || {
+      id: moduleId,
+      batteryId,
+      towerId,
+      cells: [],
+      temperatures: [],
     };
 
-    batteries[ batteryId ].towers[ towerId ].modules[ moduleId ].cells[ cellId ] = {
-      ...cell, id: cellId, batteryId, towerId, moduleId,
+    batteries[batteryId].towers[towerId].modules[moduleId].cells[cellId] = {
+      ...cell,
+      id: cellId,
+      batteryId,
+      towerId,
+      moduleId,
     };
   }
 
@@ -93,7 +115,10 @@ const mapBatteriesTowersModulesCells = (cells: ChannelItem[], moduleTemperatures
   return batteries.sort((a, b) => a.id - b.id);
 };
 
-const mapPhotovoltaicPlane = (charger: string, readComponentProperty: ReadComponentProperty,): PhotovoltaicPlane | undefined => {
+const mapPhotovoltaicPlane = (
+  charger: string,
+  readComponentProperty: ReadComponentProperty,
+): PhotovoltaicPlane | undefined => {
   const id = parseInt(charger.replace("charger", ""));
   const alias = readComponentProperty(charger, "_PropertyAlias");
   const pvPortName = readComponentProperty(charger, "_PropertyPvPort");
@@ -107,8 +132,8 @@ const mapPhotovoltaicPlane = (charger: string, readComponentProperty: ReadCompon
     return undefined;
   }
 
-  const pvPort = parseInt((pvPortName.value as string).split("_")[ 1 ]);
-  const mpptPort = parseInt((mpptPortName.value as string).split("_")[ 1 ]);
+  const pvPort = parseInt((pvPortName.value as string).split("_")[1]);
+  const mpptPort = parseInt((mpptPortName.value as string).split("_")[1]);
 
   return {
     componentName: charger,
@@ -121,10 +146,12 @@ const mapPhotovoltaicPlane = (charger: string, readComponentProperty: ReadCompon
     modbusAdapter: modbusAdapter.value as string,
     inverterName: inverterName.value as string,
     maxVoltage: {
-      value: maxVoltage.value as number, unit: maxVoltage.unit as string,
+      value: maxVoltage.value as number,
+      unit: maxVoltage.unit as string,
     },
     maxPower: {
-      value: maxPower.value as number, unit: maxPower.unit as string,
+      value: maxPower.value as number,
+      unit: maxPower.unit as string,
     },
   };
 };
@@ -149,10 +176,13 @@ export const useOpenEms = defineStore("openems", () => {
     if (isConfigured.value) {
       const apiPath = restApiPath(".*/.*");
       const response: ChannelItem[] = await callRestApi("GET", apiPath, "");
-      channelItemCache.value = response.reduce((acc, item) => {
-        acc[ item.address ] = item;
-        return acc;
-      }, {} as Record<string, ChannelItem>,);
+      channelItemCache.value = response.reduce(
+        (acc, item) => {
+          acc[item.address] = item;
+          return acc;
+        },
+        {} as Record<string, ChannelItem>,
+      );
     }
   };
 
@@ -169,8 +199,11 @@ export const useOpenEms = defineStore("openems", () => {
 
   const callEdgeRpc = async <T, R>(method: string, params?: T): Promise<R> => {
     const edgeCall: JsonRpcRequest<JsonRpcResponse<R>> = {
-      jsonrpc: "2.0", edgeId: "1", payload: {
-        method, params,
+      jsonrpc: "2.0",
+      edgeId: "1",
+      payload: {
+        method,
+        params,
       },
     };
 
@@ -186,7 +219,10 @@ export const useOpenEms = defineStore("openems", () => {
 
   const callJsonApi = async <T, R>(method: string, params?: T): Promise<R> => {
     const call: JsonRpcRequest<T> = {
-      jsonrpc: "2.0", id: window.crypto.randomUUID(), method: method, params: params || ({} as T),
+      jsonrpc: "2.0",
+      id: window.crypto.randomUUID(),
+      method: method,
+      params: params || ({} as T),
     };
 
     const body = JSON.stringify(call);
@@ -242,17 +278,17 @@ export const useOpenEms = defineStore("openems", () => {
 
   const getComponent = (component: string): Component | undefined => {
     if (!isConfigured.value) return undefined;
-    return componentCache.value[ component ];
+    return componentCache.value[component];
   };
 
   const readComponent = (component: string): ChannelItem[] => {
     if (!isConfigured.value) return [];
     return Object.keys(channelItemCache.value)
       .filter(address => address.startsWith(`${component}/`))
-      .map(address => channelItemCache.value[ address ]);
+      .map(address => channelItemCache.value[address]);
   };
 
-  const readComponents = (): { components: string[]; meta: string[] } => {
+  const readComponents = (): {components: string[]; meta: string[]} => {
     if (!isConfigured.value) return {components: [], meta: []};
     const configurations = readComponentConfigurations();
     return {
@@ -282,10 +318,10 @@ export const useOpenEms = defineStore("openems", () => {
   const readBatteries = (): Battery[] => {
     if (!isConfigured.value) return [];
     const addresses = Object.keys(channelItemCache.value);
-    const cells = addresses.filter(item => cellIdExtractor.test(item)).map(item => channelItemCache.value[ item ]);
+    const cells = addresses.filter(item => cellIdExtractor.test(item)).map(item => channelItemCache.value[item]);
     const moduleTemperatures = addresses
       .filter(item => moduleTemperatureIdExtractor.test(item))
-      .map(item => channelItemCache.value[ item ]);
+      .map(item => channelItemCache.value[item]);
     return mapBatteriesTowersModulesCells(cells, moduleTemperatures);
   };
 
@@ -306,18 +342,42 @@ export const useOpenEms = defineStore("openems", () => {
     console.log(response);
   };
 
-  const queryHistoricEnergyPerPeriod = async (fromDate: Instant, toDate: Instant, timezone: string, channels: string[], resolutionValue: number, resolutionUnit: string,): Promise<HistoricTimeseries> => {
+  const queryHistoricEnergyPerPeriod = async (
+    fromDate: Instant,
+    toDate: Instant,
+    timezone: string,
+    channels: string[],
+    resolutionValue: number,
+    resolutionUnit: string,
+  ): Promise<HistoricTimeseries> => {
     return await callJsonApi("queryHistoricTimeseriesEnergyPerPeriod", {
-      fromDate: fromDate.format("YYYY-MM-DD"), toDate: toDate.format("YYYY-MM-DD"), timezone, channels, resolution: {
-        value: resolutionValue, unit: resolutionUnit,
+      fromDate: fromDate.format("YYYY-MM-DD"),
+      toDate: toDate.format("YYYY-MM-DD"),
+      timezone,
+      channels,
+      resolution: {
+        value: resolutionValue,
+        unit: resolutionUnit,
       },
     });
   };
 
-  const queryHistoricData = async (fromDate: Instant, toDate: Instant, timezone: string, channels: string[], resolutionValue: number, resolutionUnit: string,): Promise<HistoricTimeseries> => {
+  const queryHistoricData = async (
+    fromDate: Instant,
+    toDate: Instant,
+    timezone: string,
+    channels: string[],
+    resolutionValue: number,
+    resolutionUnit: string,
+  ): Promise<HistoricTimeseries> => {
     return await callJsonApi("queryHistoricTimeseriesData", {
-      fromDate: fromDate.format("YYYY-MM-DD"), toDate: toDate.format("YYYY-MM-DD"), timezone, channels, resolution: {
-        value: resolutionValue, unit: resolutionUnit,
+      fromDate: fromDate.format("YYYY-MM-DD"),
+      toDate: toDate.format("YYYY-MM-DD"),
+      timezone,
+      channels,
+      resolution: {
+        value: resolutionValue,
+        unit: resolutionUnit,
       },
     });
   };
@@ -341,6 +401,6 @@ export const useOpenEms = defineStore("openems", () => {
     getSystemUpdateState,
     queryHistoricEnergyPerPeriod,
     queryHistoricData,
-    callEdgeRpc
+    callEdgeRpc,
   };
 });

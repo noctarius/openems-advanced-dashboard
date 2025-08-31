@@ -11,4 +11,10 @@ export function GetConfig():Promise<Record<string, any>>;
 
 export function GetSolarForecast():Promise<Array<solarforecast.Forecast>>;
 
+export function GetSolarForecastConfig():Promise<solarforecast.Configuration>;
+
+export function IsSolarForecastInitialized():Promise<boolean>;
+
 export function SaveConfig(arg1:Record<string, any>):Promise<void>;
+
+export function SetSolarForecastConfig(arg1:solarforecast.Configuration):Promise<void>;

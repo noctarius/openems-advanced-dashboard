@@ -59,13 +59,23 @@ type cachedForecast struct {
 }
 
 type SolarForecast struct {
-	config Configuration
+	config *Configuration
 }
 
-func NewSolarForecast(config Configuration) *SolarForecast {
-	return &SolarForecast{
-		config: config,
-	}
+func NewSolarForecast() *SolarForecast {
+	return &SolarForecast{}
+}
+
+func (s *SolarForecast) SetConfig(config *Configuration) {
+	s.config = config
+}
+
+func (s *SolarForecast) GetConfig() *Configuration {
+	return s.config
+}
+
+func (s *SolarForecast) IsInitialized() bool {
+	return s.config != nil
 }
 
 func (s *SolarForecast) GetEstimate() ([]Forecast, error) {

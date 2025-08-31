@@ -51,7 +51,7 @@
 <script setup lang="ts">
 import MainComponent from "../components/MainComponent.vue";
 import LineChartComponent from "../components/LineChartComponent.vue";
-import {GetClearSkyForecast, GetSolarForecast} from "../../wailsjs/go/main/App";
+import {GetClearSkyForecast, GetSolarForecast, IsSolarForecastInitialized} from "../../wailsjs/go/main/App";
 import {filterAndExpandForecastSeries} from "../helpers/series";
 import {computed, onUnmounted, ref} from "vue";
 import {solarforecast} from "../../wailsjs/go/models";
@@ -104,6 +104,8 @@ const clearSkySeries = computed(() =>
 );
 
 const loadForecasts = async () => {
+  if (!IsSolarForecastInitialized) return;
+
   const actual = await GetSolarForecast();
   const clearSky = await GetClearSkyForecast();
 

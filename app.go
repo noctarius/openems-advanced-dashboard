@@ -21,26 +21,9 @@ type App struct {
 
 // NewApp creates a new App application struct
 func NewApp() *App {
-	config := config.GetConfig()
 	return &App{
-		openEms: openems.NewOpenEms(),
-		forecaster: solarforecast.NewSolarForecast(solarforecast.Configuration{
-			ApiKey:    &config.ForecastSolar.ApiKey,
-			Latitude:  config.ForecastSolar.Latitude,
-			Longitude: config.ForecastSolar.Longitude,
-			Planes: []solarforecast.SolarPlane{
-				{
-					Declination: 25,
-					Azimuth:     40,
-					WattsPeak:   8120,
-				},
-				{
-					Declination: 25,
-					Azimuth:     -140,
-					WattsPeak:   7946,
-				},
-			},
-		}),
+		openEms:    openems.NewOpenEms(),
+		forecaster: solarforecast.NewSolarForecast(),
 	}
 }
 
@@ -74,6 +57,18 @@ func (a *App) GetSolarForecast() ([]solarforecast.Forecast, error) {
 
 func (a *App) GetClearSkyForecast() ([]solarforecast.Forecast, error) {
 	return a.forecaster.GetClearSkyEstimate()
+}
+
+func (a *App) GetSolarForecastConfig() *solarforecast.Configuration {
+	return a.forecaster.GetConfig()
+}
+
+func (a *App) SetSolarForecastConfig(config *solarforecast.Configuration) {
+	a.forecaster.SetConfig(config)
+}
+
+func (a *App) IsSolarForecastInitialized() bool {
+	return a.forecaster.IsInitialized()
 }
 
 // ### Config API ###

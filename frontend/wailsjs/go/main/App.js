@@ -18,6 +18,18 @@ export function GetSolarForecast() {
   return window['go']['main']['App']['GetSolarForecast']();
 }
 
+export function GetSolarForecastConfig() {
+  return window['go']['main']['App']['GetSolarForecastConfig']();
+}
+
+export function IsSolarForecastInitialized() {
+  return window['go']['main']['App']['IsSolarForecastInitialized']();
+}
+
 export function SaveConfig(arg1) {
   return window['go']['main']['App']['SaveConfig'](arg1);
+}
+
+export function SetSolarForecastConfig(arg1) {
+  return window['go']['main']['App']['SetSolarForecastConfig'](arg1);
 }

@@ -23,7 +23,7 @@ const median = (values: Cell[]): number => {
 </script>
 <script setup lang="ts">
 import {computed, ref, watch} from "vue";
-import {Cell} from "../openems/types";
+import {Cell} from "../services/openems/types";
 
 const props = defineProps<{
   cell: Cell;

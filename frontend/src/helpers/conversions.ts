@@ -1,4 +1,6 @@
-import {ChannelItem} from "../openems/types";
+import {ChannelItem, ValueEntity} from "../services/openems/types";
+
+type ConversionItem = ChannelItem | ValueEntity | number | undefined;
 
 export const convertPercent = (item: number, zeroToHundred: boolean = false): string => {
   if (zeroToHundred) {
@@ -7,7 +9,7 @@ export const convertPercent = (item: number, zeroToHundred: boolean = false): st
   return `${Math.round(item * 10000) / 100}%`;
 };
 
-export const convertWatts = (item: ChannelItem | undefined | number, abs: boolean = true): string | undefined => {
+export const convertWatts = (item: ConversionItem, abs: boolean = true): string | undefined => {
   if (item === undefined) return undefined;
   const watts = typeof item === "object" ? (item.unit === "W" ? item.value : item.value * 1000) : item;
   const val = abs ? Math.abs(watts) : watts;
@@ -17,7 +19,7 @@ export const convertWatts = (item: ChannelItem | undefined | number, abs: boolea
   return `${val} W`;
 };
 
-export const convertVolts = (item: ChannelItem | undefined | number): string | undefined => {
+export const convertVolts = (item: ConversionItem): string | undefined => {
   if (item === undefined) return undefined;
   const volts = typeof item === "object" ? (item.unit === "mV" ? item.value : item.value * 1000) : item;
   if (volts >= 1000) {
@@ -26,7 +28,7 @@ export const convertVolts = (item: ChannelItem | undefined | number): string | u
   return `${volts} mV`;
 };
 
-export const covertHertz = (item: ChannelItem | undefined | number): string | undefined => {
+export const covertHertz = (item: ConversionItem): string | undefined => {
   if (item === undefined) return undefined;
   const hertz = typeof item === "object" ? (item.unit === "mHz" ? item.value : item.value * 1000) : item;
   if (hertz >= 10000) {

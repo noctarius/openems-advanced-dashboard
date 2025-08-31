@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import {Tower} from "../openems/types";
+import {Tower} from "../services/openems/types";
 
 defineProps<{
   tower: Tower;

@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import {computed, ref, watch} from "vue";
-import {ModuleTemperature} from "../openems/types";
+import {ModuleTemperature} from "../services/openems/types";
 
 const props = defineProps<{
   temperature: ModuleTemperature;

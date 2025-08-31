@@ -27,10 +27,10 @@ import {computed, onUnmounted, ref, watch} from "vue";
 import {convertVolts, convertWatts, covertHertz, limitTextLength, powerChannelStatus} from "../helpers/conversions";
 import MainComponent from "../components/MainComponent.vue";
 import StatusCard, {NodeDefinition} from "../components/StatusCard.vue";
-import {ChannelItem, sellToGridLimitStateToString} from "../openems/types";
+import {ChannelItem, sellToGridLimitStateToString} from "../services/openems/types";
 import PercentageBarComponent from "../components/PercentageBarComponent.vue";
 import {useComponentsStore} from "../stores/openems-components-store";
-import {useOpenEms} from "../openems";
+import {useOpenEms} from "../services/openems";
 
 interface Card {
   title: string | (() => string);
@@ -375,10 +375,6 @@ const update = async () => {
 };
 
 update();
-
-watch(openEms, () => {
-  openEms.getSystemUpdateState();
-});
 
 const cancel = setInterval(update, 1000);
 

@@ -7,11 +7,11 @@ import {
   ModuleTemperature,
   PhotovoltaicPlane,
 } from "./types";
-import {useComponentsStore} from "../stores/openems-components-store";
-import {CallOpenEmsApi} from "../../wailsjs/go/main/App";
+import {useComponentsStore} from "../../stores/openems-components-store";
+import {CallOpenEmsApi} from "../../../wailsjs/go/main/App";
 import {defineStore} from "pinia";
 import {computed, ref} from "vue";
-import {Instant} from "../helpers/time/Instant";
+import {Instant} from "../../helpers/time/Instant";
 
 const cellIdExtractor = /battery([0-9]+)\/Tower([0-9]+)Module([0-9]+)Cell([0-9]+)Voltage/;
 const moduleTemperatureIdExtractor = /battery([0-9]+)\/Tower([0-9]+)Module([0-9]+)TemperatureSensor([0-9]+)/;
@@ -322,7 +322,7 @@ export const useOpenEms = defineStore("openems", () => {
     if (!isConfigured.value) return [];
 
     const componentStore = useComponentsStore();
-    if (componentStore.isReady) return [];
+    if (!componentStore.isReady) return [];
 
     const chargers = componentStore.selectChargers;
     const planes = chargers.map(charger => mapPhotovoltaicPlane(charger, readComponentProperty));

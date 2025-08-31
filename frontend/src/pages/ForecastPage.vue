@@ -59,7 +59,7 @@ import {convertWatts} from "../helpers/conversions";
 import {LOCAL, UTC} from "../helpers/time/Timezone";
 import {connect, disconnect} from "echarts/core";
 import Forecast = solarforecast.Forecast;
-import {useOpenEms} from "../openems";
+import {useOpenEms} from "../services/openems";
 
 const openEms = useOpenEms();
 

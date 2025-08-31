@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import {computed} from "vue";
 import CellComponent from "./CellComponent.vue";
-import {Cell, Module} from "../openems/types";
+import {Cell, Module} from "../services/openems/types";
 
 const props = defineProps<{
   module: Module;

@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import ModuleTemperatureSectorComponent from "../components/ModuleTemperatureSectorComponent.vue";
-import {Module} from "../openems/types";
+import {Module} from "../services/openems/types";
 
 defineProps<{
   module: Module;

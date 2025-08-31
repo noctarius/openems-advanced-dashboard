@@ -20,7 +20,7 @@ type ForecastSolarConfig struct {
 type PhotovoltaicPlane struct {
 	ChargerName string `json:"charger_name"`
 	PvPort      int    `json:"pv_port"`
-	MpptPort    int    `json:"mpp_port"`
+	MpptPort    int    `json:"mppt_port"`
 	Declination int    `json:"declination"`
 	Azimuth     int    `json:"azimuth"`
 }

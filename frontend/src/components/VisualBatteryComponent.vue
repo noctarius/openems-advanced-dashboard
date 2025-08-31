@@ -40,8 +40,8 @@
 <script setup lang="ts">
 import BatteryComponent from "./BatteryComponent.vue";
 import {onUnmounted, reactive, ref} from "vue";
-import {Battery} from "../openems/types";
-import {useOpenEms} from "../openems";
+import {Battery} from "../services/openems/types";
+import {useOpenEms} from "../services/openems";
 
 const openEms = useOpenEms();
 

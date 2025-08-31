@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"myproject/internal/config"
 	"myproject/internal/openems"
 	"myproject/internal/solarforecast"
@@ -77,10 +78,16 @@ func (a *App) GetClearSkyForecast() ([]solarforecast.Forecast, error) {
 
 // ### Config API ###
 
-func (a *App) GetConfig() *config.Config {
-	return config.GetConfig()
+func (a *App) GetConfig() map[string]any {
+	var c map[string]any
+	d, _ := json.Marshal(config.GetConfig())
+	_ = json.Unmarshal(d, &c)
+	return c
 }
 
-func (a *App) SaveConfig(c config.Config) error {
-	return config.SaveConfig(c)
+func (a *App) SaveConfig(c map[string]any) error {
+	var nw config.Config
+	d, _ := json.Marshal(c)
+	_ = json.Unmarshal(d, &nw)
+	return config.SaveConfig(nw)
 }

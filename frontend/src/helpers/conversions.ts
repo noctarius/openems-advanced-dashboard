@@ -23,10 +23,7 @@ export const convertWattsValue = (item: ConversionItem, abs: boolean = true): nu
   if (item === undefined) return 0;
   const watts = typeof item === "object" ? (item.unit === "W" ? item.value : item.value * 1000) : item;
   const val = abs ? Math.abs(watts) : watts;
-  if (Math.abs(watts) >= 1000) {
-    return Math.round((val / 1000) * 100) / 100;
-  }
-  return val;
+  return val / 1000;
 };
 
 export const convertCurrent = (item: ConversionItem, abs: boolean = true): string | undefined => {

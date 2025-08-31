@@ -12,6 +12,7 @@ import {useConfigStore} from "./services/config";
 import {useOpenEms} from "./services/openems";
 import {solarforecast} from "../wailsjs/go/models";
 import {SetSolarForecastConfig} from "../wailsjs/go/main/App";
+import {useForecastSolar} from "./services/forecastsolar";
 
 useConfigStore().initialize().then(async () => {
   const configStore = useConfigStore();
@@ -25,25 +26,8 @@ useConfigStore().initialize().then(async () => {
     const componentStore = useComponentsStore();
     await componentStore.initialize();
 
-    if (config.forecast_solar) {
-      const solarConfig = config.forecast_solar;
-      const photovoltaicConfig = config.system_data;
-      const photovoltaicPlanes = openEms.readPhotovoltaicPlanes()
-      const forecastSolarConfig = solarforecast.Configuration.createFrom({
-        ApiKey: solarConfig.api_key,
-        Latitude: solarConfig.latitude,
-        Longitude: solarConfig.longitude,
-        Planes: photovoltaicConfig.photovoltaic_planes.map(plane => {
-          const photovoltaicPlane = photovoltaicPlanes.find(p => p.componentName === plane.charger_name);
-          return {
-            Declination: plane.declination,
-            Azimuth: plane.azimuth,
-            WattsPeak: photovoltaicPlane?.maxPower.value,
-          }
-        }),
-      });
-      await SetSolarForecastConfig(forecastSolarConfig);
-    }
+    const forecaseSolar = useForecastSolar();
+    await forecaseSolar.initialize();
   }
 })
 </script>

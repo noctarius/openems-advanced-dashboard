@@ -1,6 +1,7 @@
 package solarforecast
 
 type SolarPlane struct {
+	ChargerName string
 	Declination int
 	Azimuth     int
 	WattsPeak   float32
@@ -14,13 +15,13 @@ type Configuration struct {
 }
 
 type ForecastEntry struct {
-	Time  int64
-	Value int
+	Time  int64 `json:"time"`
+	Value int   `json:"value"`
 }
 
 type Forecast struct {
 	Watts           []ForecastEntry `json:"watts"`
-	WattHours       []ForecastEntry `json:"watt_hours"`
-	WattHoursPeriod []ForecastEntry `json:"watt_hours_period"`
-	WattHoursDay    []ForecastEntry `json:"watt_hours_day"`
+	WattHours       []ForecastEntry `json:"wattHours"`
+	WattHoursPeriod []ForecastEntry `json:"wattHoursPeriod"`
+	WattHoursDay    []ForecastEntry `json:"wattHoursDay"`
 }

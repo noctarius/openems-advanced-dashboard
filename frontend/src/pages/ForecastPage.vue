@@ -51,17 +51,17 @@
 <script setup lang="ts">
 import MainComponent from "../components/MainComponent.vue";
 import LineChartComponent from "../components/LineChartComponent.vue";
-import {GetClearSkyForecast, GetSolarForecast, IsSolarForecastInitialized} from "../../wailsjs/go/main/App";
 import {filterAndExpandForecastSeries} from "../helpers/series";
 import {computed, onUnmounted, ref} from "vue";
-import {solarforecast} from "../../wailsjs/go/models";
 import {convertWatts} from "../helpers/conversions";
 import {LOCAL, UTC} from "../helpers/time/Timezone";
 import {connect, disconnect} from "echarts/core";
-import Forecast = solarforecast.Forecast;
 import {useOpenEms} from "../services/openems";
+import {useForecastSolar} from "../services/forecastsolar";
+import {Forecast} from "../services/forecastsolar/types";
 
 const openEms = useOpenEms();
+const forecastSolar = useForecastSolar();
 
 const weatherForecasts = ref<Forecast[]>([]);
 const clearSkyForecast = ref<Forecast[]>([]);
@@ -104,10 +104,10 @@ const clearSkySeries = computed(() =>
 );
 
 const loadForecasts = async () => {
-  if (!IsSolarForecastInitialized) return;
+  if (!await forecastSolar.isReady()) return;
 
-  const actual = await GetSolarForecast();
-  const clearSky = await GetClearSkyForecast();
+  const actual = await forecastSolar.queryWeatherBasedSolarForecast();
+  const clearSky = await forecastSolar.queryClearSkySolarForecast();
 
   const today = LOCAL.now().set({hour: 0, minute: 0, second: 0, millisecond: 0});
   const timeseries = await openEms.queryHistoricData(

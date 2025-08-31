@@ -20,6 +20,7 @@ export namespace openems {
 export namespace solarforecast {
 	
 	export class SolarPlane {
+	    ChargerName: string;
 	    Declination: number;
 	    Azimuth: number;
 	    WattsPeak: number;
@@ -30,6 +31,7 @@ export namespace solarforecast {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.ChargerName = source["ChargerName"];
 	        this.Declination = source["Declination"];
 	        this.Azimuth = source["Azimuth"];
 	        this.WattsPeak = source["WattsPeak"];
@@ -72,8 +74,8 @@ export namespace solarforecast {
 		}
 	}
 	export class ForecastEntry {
-	    Time: number;
-	    Value: number;
+	    time: number;
+	    value: number;
 	
 	    static createFrom(source: any = {}) {
 	        return new ForecastEntry(source);
@@ -81,15 +83,15 @@ export namespace solarforecast {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.Time = source["Time"];
-	        this.Value = source["Value"];
+	        this.time = source["time"];
+	        this.value = source["value"];
 	    }
 	}
 	export class Forecast {
 	    watts: ForecastEntry[];
-	    watt_hours: ForecastEntry[];
-	    watt_hours_period: ForecastEntry[];
-	    watt_hours_day: ForecastEntry[];
+	    wattHours: ForecastEntry[];
+	    wattHoursPeriod: ForecastEntry[];
+	    wattHoursDay: ForecastEntry[];
 	
 	    static createFrom(source: any = {}) {
 	        return new Forecast(source);
@@ -98,9 +100,9 @@ export namespace solarforecast {
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.watts = this.convertValues(source["watts"], ForecastEntry);
-	        this.watt_hours = this.convertValues(source["watt_hours"], ForecastEntry);
-	        this.watt_hours_period = this.convertValues(source["watt_hours_period"], ForecastEntry);
-	        this.watt_hours_day = this.convertValues(source["watt_hours_day"], ForecastEntry);
+	        this.wattHours = this.convertValues(source["wattHours"], ForecastEntry);
+	        this.wattHoursPeriod = this.convertValues(source["wattHoursPeriod"], ForecastEntry);
+	        this.wattHoursDay = this.convertValues(source["wattHoursDay"], ForecastEntry);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

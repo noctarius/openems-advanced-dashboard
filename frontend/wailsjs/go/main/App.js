@@ -6,16 +6,16 @@ export function CallOpenEmsApi(arg1, arg2, arg3) {
   return window['go']['main']['App']['CallOpenEmsApi'](arg1, arg2, arg3);
 }
 
-export function GetClearSkyForecast() {
-  return window['go']['main']['App']['GetClearSkyForecast']();
+export function GetClearSkyForecast(arg1) {
+  return window['go']['main']['App']['GetClearSkyForecast'](arg1);
 }
 
 export function GetConfig() {
   return window['go']['main']['App']['GetConfig']();
 }
 
-export function GetSolarForecast() {
-  return window['go']['main']['App']['GetSolarForecast']();
+export function GetSolarForecast(arg1) {
+  return window['go']['main']['App']['GetSolarForecast'](arg1);
 }
 
 export function GetSolarForecastConfig() {

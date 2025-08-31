@@ -5,11 +5,11 @@ import {solarforecast} from '../models';
 
 export function CallOpenEmsApi(arg1:string,arg2:string,arg3:any):Promise<openems.Response>;
 
-export function GetClearSkyForecast():Promise<Array<solarforecast.Forecast>>;
+export function GetClearSkyForecast(arg1:number):Promise<Array<solarforecast.Forecast>>;
 
 export function GetConfig():Promise<Record<string, any>>;
 
-export function GetSolarForecast():Promise<Array<solarforecast.Forecast>>;
+export function GetSolarForecast(arg1:number):Promise<Array<solarforecast.Forecast>>;
 
 export function GetSolarForecastConfig():Promise<solarforecast.Configuration>;
 

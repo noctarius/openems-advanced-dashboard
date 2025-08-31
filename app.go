@@ -51,12 +51,12 @@ func (a *App) CallOpenEmsApi(method, path string, body any) (*openems.Response, 
 
 // ### Forecast Solar API ###
 
-func (a *App) GetSolarForecast() ([]solarforecast.Forecast, error) {
-	return a.forecaster.GetEstimate()
+func (a *App) GetSolarForecast(production float64) ([]solarforecast.Forecast, error) {
+	return a.forecaster.GetEstimate(production)
 }
 
-func (a *App) GetClearSkyForecast() ([]solarforecast.Forecast, error) {
-	return a.forecaster.GetClearSkyEstimate()
+func (a *App) GetClearSkyForecast(production float64) ([]solarforecast.Forecast, error) {
+	return a.forecaster.GetClearSkyEstimate(production)
 }
 
 func (a *App) GetSolarForecastConfig() *solarforecast.Configuration {

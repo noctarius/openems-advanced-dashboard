@@ -78,20 +78,20 @@ func (s *SolarForecast) IsInitialized() bool {
 	return s.config != nil
 }
 
-func (s *SolarForecast) GetEstimate() ([]Forecast, error) {
-	return s.getEstimate(estimate)
+func (s *SolarForecast) GetEstimate(production float64) ([]Forecast, error) {
+	return s.getEstimate(estimate, production)
 }
 
-func (s *SolarForecast) GetClearSkyEstimate() ([]Forecast, error) {
-	return s.getEstimate(clearsky)
+func (s *SolarForecast) GetClearSkyEstimate(production float64) ([]Forecast, error) {
+	return s.getEstimate(clearsky, production)
 }
 
-func (s *SolarForecast) getEstimate(ft forecastType) ([]Forecast, error) {
+func (s *SolarForecast) getEstimate(ft forecastType, production float64) ([]Forecast, error) {
 	forecasts := loadCachedForecast(ft, 15*time.Minute)
 	if forecasts == nil {
 		forecasts = make([]forecast, 0)
 		for _, plane := range s.config.Planes {
-			f, err := s.getForecast(ft, plane)
+			f, err := s.getForecast(ft, plane, production)
 			if err != nil {
 				return nil, err
 			}
@@ -107,9 +107,11 @@ func (s *SolarForecast) getEstimate(ft forecastType) ([]Forecast, error) {
 	}), nil
 }
 
-func (s *SolarForecast) getForecast(forecast forecastType, plane SolarPlane) (*forecast, error) {
+func (s *SolarForecast) getForecast(forecast forecastType, plane SolarPlane, production float64) (*forecast, error) {
 	url := s.makeUrl(forecast, plane)
+	url += fmt.Sprintf("?actual=%f", production)
 
+	println(url)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
@@ -160,7 +162,7 @@ func (s *SolarForecast) makeUrl(forecast forecastType, plane SolarPlane) string 
 		strconv.FormatFloat(float64(plane.WattsPeak), 'f', 2, 32),
 	)
 
-	return fmt.Sprintf(strings.Join(segments, "/"))
+	return fmt.Sprintf("%s", strings.Join(segments, "/"))
 }
 
 func mapForecast(forecast forecast) Forecast {

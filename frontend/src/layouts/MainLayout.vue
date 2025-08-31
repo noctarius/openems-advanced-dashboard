@@ -3,7 +3,7 @@
     <template v-slot:prepend>
       <v-app-bar-nav-icon @click="toggleLeftDrawer" />
     </template>
-    <v-app-bar-title> OpenEMS Advanced Dashboard v0.1 </v-app-bar-title>
+    <v-app-bar-title> OpenEMS Advanced Dashboard v0.1</v-app-bar-title>
   </v-app-bar>
   <v-navigation-drawer
     id="navigation"

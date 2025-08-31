@@ -1,14 +1,22 @@
 root = true
 
-[frontend/**.{js,ts,json}]
+[*]
 end_of_line = lf
-charset = utf-8
 insert_final_newline = true
+charset = utf-8
 tab_width = 2
 indent_style = space
 indent_size = tab
 trim_trailing_whitespace = true
 max_line_length = 120
+
+[*.go]
+ij_go_add_leading_space_to_comments = true
+ij_go_call_parameters_new_line_after_left_paren = true
+ij_go_call_parameters_right_paren_on_new_line = true
+ij_go_wrap_func_params = on_every_item
+
+[frontend/**.{js,ts,json}]
 ij_any_keep_indents_on_empty_lines = false
 ij_any_keep_line_breaks = false
 ij_any_keep_blank_lines_in_code = 1

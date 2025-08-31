@@ -1,11 +1,11 @@
 import type {RouteRecordRaw} from "vue-router";
 import MainLayout from "../layouts/MainLayout.vue";
-import IndexPage from "../pages/IndexPage.vue";
+import AutarkyPage from "../pages/AutarkyPage.vue";
 import CellBalancePage from "../pages/CellBalancePage.vue";
 import ErrorNotFound from "../pages/ErrorNotFound.vue";
-import ModuleTemperatures from "../pages/ModuleTemperatures.vue";
 import ForecastPage from "../pages/ForecastPage.vue";
-import AutarkyPage from "../pages/AutarkyPage.vue";
+import IndexPage from "../pages/IndexPage.vue";
+import ModuleTemperatures from "../pages/ModuleTemperatures.vue";
 import PhotovoltaicPage from "../pages/PhotovoltaicPage.vue";
 
 const routes: RouteRecordRaw[] = [

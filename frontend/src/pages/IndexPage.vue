@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, onUnmounted, ref, watch} from "vue";
+import {computed, onUnmounted, ref} from "vue";
 import {convertVolts, convertWatts, covertHertz, limitTextLength, powerChannelStatus} from "../helpers/conversions";
 import MainComponent from "../components/MainComponent.vue";
 import StatusCard, {NodeDefinition} from "../components/StatusCard.vue";

@@ -8,8 +8,8 @@ import App from "./App.vue";
 import "@mdi/font/css/materialdesignicons.css";
 import "./style.css";
 import "./css/app.scss";
-import {Router} from "./router";
 import {useEcharts} from "./echarts";
+import {Router} from "./router";
 import pinia from "./stores";
 
 try {

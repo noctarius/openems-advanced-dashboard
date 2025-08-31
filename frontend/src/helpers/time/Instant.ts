@@ -1,6 +1,6 @@
 import moment from "moment-timezone";
-import {Timezone, UTC} from "./Timezone";
 import {Timestamp} from "./Timestamp";
+import {Timezone, UTC} from "./Timezone";
 
 export type UnitOfTime = moment.DurationInputArg2;
 export type InstantSetObject = moment.MomentSetObject;

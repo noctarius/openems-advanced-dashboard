@@ -1,4 +1,4 @@
-import {ChannelItem, ValueEntity} from "../services/openems/types";
+import { ChannelItem, ValueEntity } from "../services/openems/types";
 
 type ConversionItem = ChannelItem | ValueEntity | number | undefined;
 
@@ -17,6 +17,36 @@ export const convertWatts = (item: ConversionItem, abs: boolean = true): string 
     return `${Math.round((val / 1000) * 100) / 100} kW`;
   }
   return `${val} W`;
+};
+
+export const convertWattsValue = (item: ConversionItem, abs: boolean = true): number => {
+  if (item === undefined) return 0;
+  const watts = typeof item === "object" ? (item.unit === "W" ? item.value : item.value * 1000) : item;
+  const val = abs ? Math.abs(watts) : watts;
+  if (Math.abs(watts) >= 1000) {
+    return Math.round((val / 1000) * 100) / 100;
+  }
+  return val;
+};
+
+export const convertCurrent = (item: ConversionItem, abs: boolean = true): string | undefined => {
+  if (item === undefined) return undefined;
+  const watts = typeof item === "object" ? (item.unit === "mA" ? item.value : item.value * 1000) : item;
+  const val = abs ? Math.abs(watts) : watts;
+  if (Math.abs(watts) >= 1000) {
+    return `${Math.round((val / 1000) * 100) / 100} A`;
+  }
+  return `${val} mA`;
+};
+
+export const convertCurrentValue = (item: ConversionItem, abs: boolean = true): number => {
+  if (item === undefined) return 0;
+  const watts = typeof item === "object" ? (item.unit === "mA" ? item.value : item.value * 1000) : item;
+  const val = abs ? Math.abs(watts) : watts;
+  if (Math.abs(watts) >= 1000) {
+    return Math.round((val / 1000) * 100) / 100;
+  }
+  return val;
 };
 
 export const convertVolts = (item: ConversionItem): string | undefined => {

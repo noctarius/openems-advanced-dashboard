@@ -17,6 +17,7 @@ export const useComponentsStore = defineStore("openems-components", () => {
   const isLoading = computed(() => status.value === "loading");
   const selectMeters = computed(() => [...openEms.selectComponents("meter")]);
   const selectChargers = computed(() => [...openEms.selectComponents("charger")]);
+  const selectBatteryInverters = computed(() => [...openEms.selectComponents("batteryInverter")]);
 
   const initialize = async () => {
     status.value = "loading";
@@ -37,6 +38,7 @@ export const useComponentsStore = defineStore("openems-components", () => {
     isLoading,
     selectMeters,
     selectChargers,
+    selectBatteryInverters,
     initialize,
   };
 });

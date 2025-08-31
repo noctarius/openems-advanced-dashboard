@@ -6,6 +6,7 @@ import ErrorNotFound from "../pages/ErrorNotFound.vue";
 import ModuleTemperatures from "../pages/ModuleTemperatures.vue";
 import ForecastPage from "../pages/ForecastPage.vue";
 import AutarkyPage from "../pages/AutarkyPage.vue";
+import PhotovoltaicPage from "../pages/PhotovoltaicPage.vue";
 
 const routes: RouteRecordRaw[] = [
   {
@@ -29,7 +30,7 @@ const routes: RouteRecordRaw[] = [
         path: "graphs/forecast",
         name: "Forecast & Production",
         component: ForecastPage,
-        meta: {icon: "mdi-chart-line"},
+        meta: {icon: "mdi-sun-clock-outline"},
       },
       {
         path: "graphs/autarky",
@@ -37,6 +38,12 @@ const routes: RouteRecordRaw[] = [
         component: AutarkyPage,
         meta: {icon: "mdi-chart-line"},
       },
+      {
+        path: "photovoltaic/strings",
+        name: "MPPT Trackers",
+        component: PhotovoltaicPage,
+        meta: {icon: "mdi-solar-power-variant-outline"},
+      }
     ],
   },
 

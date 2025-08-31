@@ -57,9 +57,11 @@ const cards = computed<Card[]>(() => {
         prop.address.toLowerCase().startsWith(propertyBaseAddress),
       );
 
-      const ampereProperty = trackerProperties.find(prop => prop.address.endsWith("I"));
+      const currentProperty = trackerProperties.find(prop => prop.address.endsWith("I"));
       const powerProperty = trackerProperties.find(prop => prop.address.endsWith("P"));
-      const voltage = (convertWattsValue(powerProperty) * 1000) / convertCurrentValue(ampereProperty);
+      const currentValue =convertCurrentValue(currentProperty);
+      const powerValue = convertWattsValue(powerProperty) * 1000;
+      const voltage = currentValue !== 0 ? powerValue / currentValue : 0;
 
       return {
         title: `${plane.alias} (${plane.mpptPortName}, ${plane.pvPortName})`,
@@ -74,11 +76,11 @@ const cards = computed<Card[]>(() => {
           },
           {
             title: "Actual Current",
-            value: `${convertCurrent(ampereProperty?.value) || "?"}`,
+            value: `${convertCurrent(currentProperty?.value) || "?"}`,
           },
           {
             title: "Actual Voltage",
-            value: `${voltage ? voltage.toFixed(2) + " V" : "?"}`,
+            value: `${voltage !== Number.NaN ? voltage.toFixed(2) + " V" : "?"}`,
           },
         ],
       };

@@ -48,10 +48,10 @@ watch(
 );
 
 const calculatedTemperatureColor = computed(() => {
-  if (props.temperature.value > 100 && props.temperature.value < 300) {
+  if (props.temperature.value > 100 && props.temperature.value < 350) {
     return "#90EE90";
   } else if (
-    (props.temperature.value >= 300 && props.temperature.value < 500) ||
+    (props.temperature.value >= 350 && props.temperature.value < 500) ||
     (props.temperature.value >= 0 && props.temperature.value < 100)
   ) {
     return "#FFFFC5";

@@ -12,20 +12,24 @@
     <v-list>
       <v-list-item
         title="Components"
-        align="start" />
+        class="text-start"
+      />
       <v-spacer />
       <v-list-item
         v-for="link in linksList"
-        :key="link.title"
+        :key="link.link"
         :to="link.link"
+        :active="link.link === $route.path"
         :prepend-icon="link.icon"
         :title="link.title"
-        align="start" />
+        class="text-start"
+      />
       <v-list-item
         @click="openSettings"
         prepend-icon="mdi-cog"
         title="Settings"
-        align="start" />
+        class="text-start"
+      />
     </v-list>
   </v-navigation-drawer>
   <v-main>

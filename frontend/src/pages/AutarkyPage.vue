@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import MainComponent from "../components/MainComponent.vue";
 import LineChartComponent from "../components/LineChartComponent.vue";
-import {computed, ref} from "vue";
+import {computed, onUnmounted, ref} from "vue";
 import {LOCAL, UTC} from "../helpers/time/Timezone";
 import {convertPercent} from "../helpers/conversions";
 import {useOpenEms} from "../services/openems";
@@ -65,7 +65,8 @@ const loadForecasts = async () => {
         .map((timestamp, index) => {
           const totalConsumption = timeseries.data["_sum/ConsumptionActivePower"][index] || 0;
           const gridConsumption = timeseries.data["_sum/GridToConsumptionPower"][index] || 0;
-          return [timestamp, Math.round((1 - gridConsumption / totalConsumption) * 10000) / 10000];
+          const basis = totalConsumption === 0 ? 0 : gridConsumption / totalConsumption;
+          return [timestamp, Math.round((1 - basis) * 10000) / 10000];
         });
 
     autarkyData.value = autarky;
@@ -77,4 +78,13 @@ const loadForecasts = async () => {
 };
 
 loadForecasts();
+
+const timeout = setInterval(() => {
+  loadForecasts();
+}, 60000);
+
+onUnmounted(() => {
+  clearInterval(timeout);
+  autarkyData.value = [];
+});
 </script>

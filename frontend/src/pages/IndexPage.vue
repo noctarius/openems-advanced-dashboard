@@ -72,7 +72,7 @@ const chargerNames = computed<string[]>(() =>
   chargers.value.map(charger => openEms.getComponent(charger)?.alias).filter(name => name !== undefined),
 );
 
-const secondaryMeters = computed<string[]>(() => meterNames.value.filter(name => name !== "meter0"));
+const secondaryMeters = computed<string[]>(() => meters.value.filter(name => name !== "meter0"));
 
 const cards = computed<Card[]>(() => {
   return [
@@ -154,9 +154,10 @@ const cards = computed<Card[]>(() => {
             return `${convertWatts({value: power, unit: "W"} as any)} ${status}`;
           },
         },
-        ...secondaryMeters.value.map((_, index) => {
+        ...secondaryMeters.value.map((meter, index) => {
+          const component = openEms.getComponent(meter);
           return {
-            title: () => meterNames.value[index],
+            title: () => component?.alias || "Meter" + index,
             value: () => `${convertWatts(meterPowers.value[index])}`,
           };
         }),

@@ -341,5 +341,6 @@ export const useOpenEms = defineStore("openems", () => {
     getSystemUpdateState,
     queryHistoricEnergyPerPeriod,
     queryHistoricData,
+    callEdgeRpc
   };
 });

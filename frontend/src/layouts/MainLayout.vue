@@ -44,12 +44,18 @@
 
 <script setup lang="ts">
 import {computed, ref} from "vue";
-import {EssentialLinkProps} from "../components/EssentialLink.vue";
 import SettingsModal from "../modal/SettingsModal.vue";
 import routes from "../router/routes";
 import type {RouteRecordRaw} from "vue-router";
 
-const linksList = computed<EssentialLinkProps[]>(() => {
+interface LinkProps {
+  title: string;
+  caption?: string;
+  link?: string;
+  icon?: string;
+}
+
+const linksList = computed<LinkProps[]>(() => {
   const links = (prefix: string, route: RouteRecordRaw): {title?: string; icon?: string; link: string}[] => {
     const link = `${prefix}${route.path}`;
     return [
@@ -62,7 +68,7 @@ const linksList = computed<EssentialLinkProps[]>(() => {
     ];
   };
 
-  return routes.flatMap(route => links("", route)).filter(route => route.title) as EssentialLinkProps[];
+  return routes.flatMap(route => links("", route)).filter(route => route.title) as LinkProps[];
 });
 
 const leftDrawerOpen = ref(false);

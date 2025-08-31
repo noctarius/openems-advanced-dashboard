@@ -10,8 +10,6 @@
 import {useComponentsStore} from "./stores/openems-components-store";
 import {useConfigStore} from "./services/config";
 import {useOpenEms} from "./services/openems";
-import {solarforecast} from "../wailsjs/go/models";
-import {SetSolarForecastConfig} from "../wailsjs/go/main/App";
 import {useForecastSolar} from "./services/forecastsolar";
 
 useConfigStore().initialize().then(async () => {

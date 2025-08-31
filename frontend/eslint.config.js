@@ -1,5 +1,6 @@
 import js from "@eslint/js";
 import globals from "globals";
+import eslintConfigPrettier from "eslint-config-prettier";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
@@ -7,7 +8,10 @@ export default tseslint.config(
     ignores: ["dist", "wailsjs"],
   },
   {
-    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    extends: [
+      js.configs.recommended,
+      ...tseslint.configs.recommended,
+    ],
     files: ["**/*.{js,ts,tsx}"],
     languageOptions: {
       ecmaVersion: 2020,
@@ -27,4 +31,5 @@ export default tseslint.config(
       ],
     },
   },
+  eslintConfigPrettier
 );

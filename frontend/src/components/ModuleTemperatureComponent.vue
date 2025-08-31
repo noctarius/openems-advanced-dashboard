@@ -22,7 +22,7 @@ import ModuleTemperatureSectorComponent from "../components/ModuleTemperatureSec
 import {Module} from "../services/openems/types";
 
 defineProps<{
-  module: Module;
+  module: Module
 }>();
 </script>
 

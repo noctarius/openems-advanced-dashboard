@@ -18,7 +18,7 @@ import TowerComponent from "../components/TowerComponent.vue";
 import {Battery} from "../services/openems/types";
 
 defineProps<{
-  battery: Battery;
+  battery: Battery
 }>();
 </script>
 

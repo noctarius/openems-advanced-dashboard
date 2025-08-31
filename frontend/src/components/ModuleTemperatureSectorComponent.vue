@@ -13,8 +13,8 @@ import {computed, ref, watch} from "vue";
 import {ModuleTemperature} from "../services/openems/types";
 
 const props = defineProps<{
-  temperature: ModuleTemperature;
-  temperatures: ModuleTemperature[];
+  temperature: ModuleTemperature
+  temperatures: ModuleTemperature[]
 }>();
 
 const convertTemperature = (temperature: ModuleTemperature) => {

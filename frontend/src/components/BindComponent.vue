@@ -4,5 +4,5 @@
 </template>
 
 <script setup lang="ts">
-const model = defineModel<any>();
+const model = defineModel<any>({});
 </script>

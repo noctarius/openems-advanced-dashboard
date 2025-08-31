@@ -25,11 +25,10 @@
 </template>
 
 <script setup lang="ts">
-import {computed, ref} from "vue";
+import {computed} from "vue";
 import {convertCurrent, convertCurrentValue, convertWatts, convertWattsValue} from "../helpers/conversions";
 import MainComponent from "../components/MainComponent.vue";
 import StatusCard, {NodeDefinition} from "../components/StatusCard.vue";
-import {ValueEntity} from "../services/openems/types";
 import {useComponentsStore} from "../stores/openems-components-store";
 import {useOpenEms} from "../services/openems";
 
@@ -42,15 +41,6 @@ interface CardItem {
   title: string | (() => NodeDefinition | string);
   value: string | (() => NodeDefinition | string);
 }
-
-interface TrackerInfo {
-  mpptTracker: string;
-  maxPower: ValueEntity;
-  currentPower: ValueEntity;
-  currentAmpere: ValueEntity;
-}
-
-const trackers = ref<TrackerInfo[]>([]);
 
 const componentsStore = useComponentsStore();
 const openEms = useOpenEms();

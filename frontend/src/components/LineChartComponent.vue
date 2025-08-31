@@ -15,7 +15,6 @@ import {ref, watchEffect} from "vue";
 import {EChartsOption} from "echarts";
 import {LOCAL} from "../helpers/time/Timezone";
 import {Timestamp} from "../helpers/time/Timestamp";
-import {openems} from "../../wailsjs/go/models";
 
 interface DataSeries {
   name: string;

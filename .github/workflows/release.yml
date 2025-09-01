@@ -35,12 +35,18 @@ jobs:
           cd ..
           go install github.com/wailsapp/wails/v2/cmd/wails@latest
           wails doctor
+          mkdir artifacts
       - name: Build Application
         run: |
-          wails build -o oad
-        env:
-          GOOS: ${{ matrix.os }}
-          GOARCH: ${{ matrix.arch }}
+          wails build -platform linux/${{ matrix.arch }} -o oad
+      - name: Package Application (linux/${{ matrix.arch }})
+        run: |
+          tar cvfz artifacts/oad_linux_${{ matrix.arch }}.tar.gz build/bin/*
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.APP_NAME }}_${{ matrix.goos }}_${{ matrix.arch }}
+          path: artifacts/*
 
   builder-macos:
     runs-on: macos-latest
@@ -61,18 +67,24 @@ jobs:
         cd ..
         go install github.com/wailsapp/wails/v2/cmd/wails@latest
         wails doctor
-    - name: Build Application
+        mkdir artifacts
+    - name: Build Application (darwin/arm64)
       run: |
-        wails build -platform darwin/arm64 -o "OpenEMS Advanced Dashboard.app"
-        wails build -platform darwin/universal -o "OpenEMS Advanced Dashboard (universal).app"
-      env:
-        GOOS: ${{ matrix.os }}
-        GOARCH: ${{ matrix.arch }}
+        wails build -platform darwin/arm64 -clean
+    - name: Package Application (darwin/arm64)
+      run: |
+        tar cvfz artifacts/oad_darwin_arm64.tar.gz build/bin/*
+    - name: Build Application (darwin/universal)
+      run: |
+        wails build -platform darwin/universal -clean
+    - name: Package Application (darwin/arm64)
+      run: |
+        tar cvfz artifacts/oad_darwin_universal.tar.gz build/bin/*
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.APP_NAME }}_${{ matrix.goos }}_${{ matrix.arch }}
-        path: build/bin/*
+        path: artifacts/*
 
   builder-windows:
     strategy:
@@ -99,15 +111,15 @@ jobs:
         wails doctor
     - name: Build Application
       run: |
-        wails build -o "OpenEMS Advanced Dashboard.exe"
-      env:
-        GOOS: ${{ matrix.os }}
-        GOARCH: ${{ matrix.arch }}
+        wails build -platform windows/${{ matrix.arch }}
+    - name: Package Application (windows/${{ matrix.arch }})
+      run: |
+        zip artifacts/oad_windows_${{ matrix.arch }}.zip build/bin/*
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.APP_NAME }}_${{ matrix.goos }}_${{ matrix.arch }}
-        path: build/bin/*
+        path: artifacts/*
 
   upload-to-release:
     name: Attach assets to release

@@ -1,0 +1,84 @@
+name: Build Release
+on:
+  release:
+    types:
+      - created
+
+permissions:
+  contents: write
+  packages: write
+  deployments: write
+
+jobs:
+  builder:
+    strategy:
+      matrix:
+        runner: [ubuntu-latest, macos-latest, windows-latest]
+        arch: [amd64, arm64]
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.25
+          architecture: ${{ matrix.arch }}
+      - name: Setup Node
+        uses: actions/setup-node@v4
+      - name: Setup Environment (Linux)
+        if: ${{ matrix.runner == 'ubuntu-latest' }}
+        run: |
+          apt update
+          apt install -y libwebkit2gtk-4.1-dev build-essential
+      - name: Setup Environment (macOS)
+        if: ${{ matrix.runner == 'macos-latest' }}
+        run: |
+          xcode-select --install
+      - name: Setup Environment (Windows)
+        if: ${{ matrix.runner == 'windows-latest' }}
+        run: |
+      - name: Install Dependencies
+        run: |
+          npm install
+          go install github.com/wailsapp/wails/v2/cmd/wails@latest
+          wails doctor
+      - name: Build Application (Linux)
+        if: ${{ matrix.runner == 'ubuntu-latest' }}
+        run: |
+          wails build -o oad
+        env:
+          GOOS: ${{ matrix.runner }}
+          GOARCH: ${{ matrix.arch }}
+      - name: Build Application (macOS)
+        if: ${{ matrix.runner == 'macos-latest' }}
+        run: |
+          wails build -o "OpenEMS Advanced Dashboard.app"
+        env:
+          GOOS: ${{ matrix.runner }}
+          GOARCH: ${{ matrix.arch }}
+      - name: Build Application (Windows)
+        if: ${{ matrix.runner == 'windows-latest' }}
+        run: |
+          wails build -o "OpenEMS Advanced Dashboard.exe"
+        env:
+          GOOS: ${{ matrix.runner }}
+          GOARCH: ${{ matrix.arch }}
+      - name: Upload Artifact (Linux)
+        if: ${{ matrix.runner == 'ubuntu-latest' }}
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            build/bin/oad
+      - name: Upload Artifact (macOS)
+        if: ${{ matrix.runner == 'macos-latest' }}
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            "build/bin/OpenEMS\ Advanced\ Dashboard.app"
+      - name: Upload Artifact (Windows)
+        if: ${{ matrix.runner == 'windows-latest' }}
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            "build/bin/OpenEMS\ Advanced\ Dashboard.exe"

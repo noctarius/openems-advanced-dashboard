@@ -13,7 +13,7 @@ jobs:
       matrix:
         os: [ ubuntu ]
         arch: [ amd64, arm64 ]
-    runs-on: ${{ matrix.os }}${{ matrix.arch == 'arm64' && '-arm' || '-latest' }}
+    runs-on: ${{ matrix.os }}${{ matrix.arch == 'arm64' && '-24.04-arm' || '-latest' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -91,7 +91,7 @@ jobs:
       matrix:
         os: [ windows ]
         arch: [ amd64, arm64 ]
-    runs-on: ${{ matrix.os }}${{ matrix.arch == 'arm64' && '-arm' || '-11-latest' }}
+    runs-on: ${{ matrix.os }}${{ matrix.arch == 'arm64' && '-11-arm' || '-latest' }}
     steps:
     - name: Checkout
       uses: actions/checkout@v4

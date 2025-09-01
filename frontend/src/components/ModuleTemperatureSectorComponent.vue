@@ -1,16 +1,17 @@
 <template>
   <td
-    :class="{'flash-border': flash, 'cell': 'cell'}"
+    :class="{ 'flash-border': flash, cell: 'cell' }"
     :style="{
       backgroundColor: calculatedTemperatureColor,
-    }">
+    }"
+  >
     {{ value }} °C
   </td>
 </template>
 
 <script setup lang="ts">
-import {computed, ref, watch} from "vue";
-import {ModuleTemperature} from "../services/openems/types";
+import { computed, ref, watch } from "vue";
+import { ModuleTemperature } from "../services/openems/types";
 
 const props = defineProps<{
   temperature: ModuleTemperature;
@@ -44,7 +45,7 @@ watch(
       flash.value = false;
     }, 2000);
   },
-  {deep: true},
+  { deep: true },
 );
 
 const calculatedTemperatureColor = computed(() => {

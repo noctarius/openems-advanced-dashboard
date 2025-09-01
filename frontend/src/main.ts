@@ -1,15 +1,15 @@
-import {createApp} from "vue";
+import { createApp } from "vue";
 import "vuetify/styles";
-import {createVuetify} from "vuetify";
+import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
-import {aliases, mdi} from "vuetify/iconsets/mdi";
+import { aliases, mdi } from "vuetify/iconsets/mdi";
 import App from "./App.vue";
 import "@mdi/font/css/materialdesignicons.css";
 import "./style.css";
 import "./css/app.scss";
-import {useEcharts} from "./echarts";
-import {Router} from "./router";
+import { useEcharts } from "./echarts";
+import { Router } from "./router";
 import pinia from "./stores";
 
 try {

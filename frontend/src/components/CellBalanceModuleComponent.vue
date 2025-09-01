@@ -1,26 +1,29 @@
 <template>
   <div
     :key="module.id"
-    class="module">
+    class="module"
+  >
     <span class="title"> Module {{ module.id + 1 }} </span>
     <table style="margin-bottom: 5px; width: 450px">
       <tr
         v-for="(row, rowIndex) in chunkedCells"
-        :key="rowIndex">
+        :key="rowIndex"
+      >
         <cell-component
           v-for="(cell, cellIndex) in row"
           :key="cellIndex"
           :cell="cell"
-          :cells="module.cells" />
+          :cells="module.cells"
+        />
       </tr>
     </table>
   </div>
 </template>
 
 <script setup lang="ts">
-import {computed} from "vue";
+import { computed } from "vue";
 import CellComponent from "./CellComponent.vue";
-import {Cell, Module} from "../services/openems/types";
+import { Cell, Module } from "../services/openems/types";
 
 const props = defineProps<{
   module: Module;

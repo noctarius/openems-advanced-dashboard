@@ -4,12 +4,12 @@ interface Wails {
   Callback(incomingMessage: string): void;
 
   callbacks: {
-    [name: string]: {timeoutHandle?: ReturnType<setTimeout>; resolve: Callback; reject: Callback};
+    [name: string]: { timeoutHandle?: ReturnType<setTimeout>; resolve: Callback; reject: Callback };
   };
 
   EventsNotify(notifyMessage: string): void;
 
-  eventListeners: {[name: string]: new (eventName: string, callback: Callback, maxCallbacks: number) => any};
+  eventListeners: { [name: string]: new (eventName: string, callback: Callback, maxCallbacks: number) => any };
 }
 
 interface Window {

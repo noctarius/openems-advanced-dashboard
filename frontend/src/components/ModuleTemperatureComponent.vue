@@ -1,7 +1,8 @@
 <template>
   <div
     :key="module.id"
-    class="module">
+    class="module"
+  >
     <span class="title"> Module {{ module.id + 1 }} </span>
     <table style="margin-bottom: 5px; width: 450px">
       <tbody>
@@ -10,7 +11,8 @@
             v-for="(temperature, rowIndex) in module.temperatures"
             :key="rowIndex"
             :temperature="temperature"
-            :temperatures="module.temperatures" />
+            :temperatures="module.temperatures"
+          />
         </tr>
       </tbody>
     </table>
@@ -19,7 +21,7 @@
 
 <script setup lang="ts">
 import ModuleTemperatureSectorComponent from "../components/ModuleTemperatureSectorComponent.vue";
-import {Module} from "../services/openems/types";
+import { Module } from "../services/openems/types";
 
 defineProps<{
   module: Module;

@@ -5,7 +5,8 @@
 
       <div
         class="text-h2"
-        style="opacity: 0.4">
+        style="opacity: 0.4"
+      >
         Oops. Nothing here...
       </div>
       <v-btn
@@ -15,7 +16,8 @@
         unelevated
         to="/"
         label="Go Home"
-        no-caps />
+        no-caps
+      />
     </div>
   </div>
 </template>

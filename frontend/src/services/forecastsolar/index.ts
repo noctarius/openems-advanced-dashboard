@@ -1,13 +1,13 @@
-import {defineStore} from "pinia";
-import {GetClearSkyForecast} from "../../../wailsjs/go/main/App.js";
-import {GetSolarForecast} from "../../../wailsjs/go/main/App.js";
-import {IsSolarForecastInitialized} from "../../../wailsjs/go/main/App.js";
-import {SetSolarForecastConfig} from "../../../wailsjs/go/main/App.js";
-import {solarforecast} from "../../../wailsjs/go/models.js";
-import {LOCAL} from "../../helpers/time/Timezone.js";
-import {useConfigStore} from "../config/index.js";
-import {useOpenEms} from "../openems/index.js";
-import type {Forecast} from "./types.js";
+import { defineStore } from "pinia";
+import { GetClearSkyForecast } from "../../../wailsjs/go/main/App.js";
+import { GetSolarForecast } from "../../../wailsjs/go/main/App.js";
+import { IsSolarForecastInitialized } from "../../../wailsjs/go/main/App.js";
+import { SetSolarForecastConfig } from "../../../wailsjs/go/main/App.js";
+import { solarforecast } from "../../../wailsjs/go/models.js";
+import { LOCAL } from "../../helpers/time/Timezone.js";
+import { useConfigStore } from "../config/index.js";
+import { useOpenEms } from "../openems/index.js";
+import type { Forecast } from "./types.js";
 
 const min = (a: number, b: number) => (a < b ? a : b);
 const max = (a: number, b: number) => (a > b ? a : b);

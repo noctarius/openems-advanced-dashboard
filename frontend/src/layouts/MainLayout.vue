@@ -8,11 +8,13 @@
   <v-navigation-drawer
     id="navigation"
     :permanent="true"
-    :rail="leftDrawerOpen">
+    :rail="leftDrawerOpen"
+  >
     <v-list>
       <v-list-item
         title="Components"
-        class="text-start" />
+        class="text-start"
+      />
       <v-spacer />
       <v-list-item
         v-for="link in linksList"
@@ -21,12 +23,14 @@
         :active="link.link === $route.path"
         :prepend-icon="link.icon"
         :title="link.title"
-        class="text-start" />
+        class="text-start"
+      />
       <v-list-item
         @click="openSettings"
         prepend-icon="mdi-cog"
         title="Settings"
-        class="text-start" />
+        class="text-start"
+      />
     </v-list>
   </v-navigation-drawer>
   <v-main>
@@ -36,14 +40,15 @@
   </v-main>
   <SettingsModal
     :open="settingsOpen"
-    @closed="settingsOpen = false" />
+    @closed="settingsOpen = false"
+  />
 </template>
 
 <script setup lang="ts">
-import {computed, ref} from "vue";
+import { computed, ref } from "vue";
 import SettingsModal from "../modal/SettingsModal.vue";
 import routes from "../router/routes";
-import type {RouteRecordRaw} from "vue-router";
+import type { RouteRecordRaw } from "vue-router";
 
 interface LinkProps {
   title: string;
@@ -53,7 +58,7 @@ interface LinkProps {
 }
 
 const linksList = computed<LinkProps[]>(() => {
-  const links = (prefix: string, route: RouteRecordRaw): {title?: string; icon?: string; link: string}[] => {
+  const links = (prefix: string, route: RouteRecordRaw): { title?: string; icon?: string; link: string }[] => {
     const link = `${prefix}${route.path}`;
     return [
       {

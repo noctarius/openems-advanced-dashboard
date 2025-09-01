@@ -4,12 +4,14 @@
     transition="dialog-bottom-transition"
     persistent
     fullscreen
-    @after-leave="events('closed')">
+    @after-leave="events('closed')"
+  >
     <v-card>
       <v-toolbar color="primary">
         <v-btn
           icon="mdi-close"
-          @click="dialog = false"></v-btn>
+          @click="dialog = false"
+        ></v-btn>
 
         <v-toolbar-title>Settings</v-toolbar-title>
 
@@ -17,7 +19,8 @@
           <v-btn
             text="Save"
             variant="text"
-            @click="dialog = false"></v-btn>
+            @click="dialog = false"
+          ></v-btn>
         </v-toolbar-items>
       </v-toolbar>
 
@@ -27,7 +30,8 @@
             <v-tabs
               v-model="tabs"
               color="primary"
-              direction="vertical">
+              direction="vertical"
+            >
               <v-tab value="openems">OpenEMS</v-tab>
               <v-tab value="system">System</v-tab>
               <v-tab value="forecast">Forecast</v-tab>
@@ -47,12 +51,14 @@
                         <v-list-item
                           subtitle="Set the content filtering level to restrict apps that can be downloaded"
                           title="Content filtering"
-                          link></v-list-item>
+                          link
+                        ></v-list-item>
 
                         <v-list-item
                           subtitle="Require password for purchase or use password to restrict purchase"
                           title="Password"
-                          link></v-list-item>
+                          link
+                        ></v-list-item>
 
                         <v-divider></v-divider>
 
@@ -61,12 +67,14 @@
                         <v-list-item
                           subtitle="Notify me about updates to apps or games that I downloaded"
                           title="Notifications"
-                          @click="notifications = !notifications">
+                          @click="notifications = !notifications"
+                        >
                           <template v-slot:prepend>
                             <v-list-item-action start>
                               <v-checkbox-btn
                                 v-model="notifications"
-                                color="primary"></v-checkbox-btn>
+                                color="primary"
+                              ></v-checkbox-btn>
                             </v-list-item-action>
                           </template>
                         </v-list-item>
@@ -74,12 +82,14 @@
                         <v-list-item
                           subtitle="Auto-update apps at any time. Data charges may apply"
                           title="Sound"
-                          @click="sound = !sound">
+                          @click="sound = !sound"
+                        >
                           <template v-slot:prepend>
                             <v-list-item-action start>
                               <v-checkbox-btn
                                 v-model="sound"
-                                color="primary"></v-checkbox-btn>
+                                color="primary"
+                              ></v-checkbox-btn>
                             </v-list-item-action>
                           </template>
                         </v-list-item>
@@ -87,12 +97,14 @@
                         <v-list-item
                           subtitle="Automatically add home screen widgets"
                           title="Auto-add widgets"
-                          @click="widgets = !widgets">
+                          @click="widgets = !widgets"
+                        >
                           <template v-slot:prepend>
                             <v-list-item-action start>
                               <v-checkbox-btn
                                 v-model="widgets"
-                                color="primary"></v-checkbox-btn>
+                                color="primary"
+                              ></v-checkbox-btn>
                             </v-list-item-action>
                           </template>
                         </v-list-item>
@@ -129,13 +141,13 @@
 </template>
 
 <script setup lang="ts">
-import {ref, shallowRef, watch} from "vue";
-import {useConfigStore} from "../services/config";
+import { ref, shallowRef, watch } from "vue";
+import { useConfigStore } from "../services/config";
 import SystemSettingsComponent from "../components/SystemSettingsComponent.vue";
-import {Config} from "../services/config/types";
+import { Config } from "../services/config/types";
 
 const events = defineEmits(["closed"]);
-const props = defineProps<{open: boolean}>();
+const props = defineProps<{ open: boolean }>();
 
 const configStore = useConfigStore();
 
@@ -146,7 +158,7 @@ watch(
   value => {
     currentConfig.value = value;
   },
-  {immediate: true},
+  { immediate: true },
 );
 
 watch(

@@ -2,8 +2,9 @@
   <v-progress-linear
     :model-value="value"
     color="primary"
-    height="25">
-    <template #default="{value}">
+    height="25"
+  >
+    <template #default="{ value }">
       <span
         class="back"
         ref="backRef"
@@ -19,9 +20,9 @@
 </template>
 
 <script setup lang="ts">
-import {computed, ref, watch} from "vue";
+import { computed, ref, watch } from "vue";
 
-const props = defineProps<{value: number}>();
+const props = defineProps<{ value: number }>();
 const frontRef = ref<HTMLSpanElement | null>(null);
 const backRef = ref<HTMLSpanElement | null>(null);
 

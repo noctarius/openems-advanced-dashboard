@@ -4,13 +4,14 @@
   </div>
   <div
     ref="content"
-    class="overflow-y-auto overflow-x-hidden">
+    class="overflow-y-auto overflow-x-hidden"
+  >
     <slot></slot>
   </div>
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import { onMounted, ref } from "vue";
 
 defineProps<{
   title: string;

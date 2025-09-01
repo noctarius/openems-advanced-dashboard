@@ -1,7 +1,7 @@
 <template>
   <main-component title="Battery Module Temperatures">
     <visual-battery-component>
-      <template #default="{module}">
+      <template #default="{ module }">
         <ModuleTemperatureComponent :module="module" />
       </template>
     </visual-battery-component>

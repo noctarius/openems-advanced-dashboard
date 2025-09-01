@@ -1,7 +1,7 @@
-import {defineStore} from "pinia";
-import {computed, ref} from "vue";
-import {GetConfig, SaveConfig} from "../../../wailsjs/go/main/App";
-import {Config} from "./types";
+import { defineStore } from "pinia";
+import { computed, ref } from "vue";
+import { GetConfig, SaveConfig } from "../../../wailsjs/go/main/App";
+import { Config } from "./types";
 
 type Status = "idle" | "loading" | "error" | "ready";
 

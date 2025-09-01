@@ -1,4 +1,4 @@
-import {createPinia} from "pinia";
+import { createPinia } from "pinia";
 
 /*
  * When adding new properties to stores, you should also

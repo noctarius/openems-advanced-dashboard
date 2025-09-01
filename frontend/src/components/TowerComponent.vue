@@ -3,17 +3,19 @@
     <slot
       v-for="module in tower.modules"
       :key="module.id"
-      :module="module" />
+      :module="module"
+    />
     <div
       class="title"
-      style="width: 100%; text-align: center">
+      style="width: 100%; text-align: center"
+    >
       Battery Tower {{ tower.id + 1 }}
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {Tower} from "../services/openems/types";
+import { Tower } from "../services/openems/types";
 
 defineProps<{
   tower: Tower;

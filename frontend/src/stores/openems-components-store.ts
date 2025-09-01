@@ -1,7 +1,7 @@
-import {acceptHMRUpdate, defineStore} from "pinia";
-import {computed, ref} from "vue";
-import {useOpenEms} from "../services/openems";
-import {Component} from "../services/openems/types";
+import { acceptHMRUpdate, defineStore } from "pinia";
+import { computed, ref } from "vue";
+import { useOpenEms } from "../services/openems";
+import { Component } from "../services/openems/types";
 
 type Status = "idle" | "loading" | "error" | "ready";
 

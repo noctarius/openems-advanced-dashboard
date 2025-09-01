@@ -10,7 +10,8 @@
                 :loading="loading"
                 :converter="convertPercent"
                 style="height: 390px"
-                group="forecast" />
+                group="forecast"
+              />
             </v-col>
           </v-row>
         </v-container>
@@ -22,10 +23,10 @@
 <script setup lang="ts">
 import MainComponent from "../components/MainComponent.vue";
 import LineChartComponent from "../components/LineChartComponent.vue";
-import {computed, onUnmounted, ref} from "vue";
-import {LOCAL, UTC} from "../helpers/time/Timezone";
-import {convertPercent} from "../helpers/conversions";
-import {useOpenEms} from "../services/openems";
+import { computed, onUnmounted, ref } from "vue";
+import { LOCAL, UTC } from "../helpers/time/Timezone";
+import { convertPercent } from "../helpers/conversions";
+import { useOpenEms } from "../services/openems";
 
 const openEms = useOpenEms();
 
@@ -45,7 +46,7 @@ const autarkySeries = computed(() => {
 
 const loadForecasts = async () => {
   try {
-    const today = LOCAL.now().set({hour: 0, minute: 0, second: 0, millisecond: 0});
+    const today = LOCAL.now().set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
     const timeseries = await openEms.queryHistoricData(
       today,
       today,

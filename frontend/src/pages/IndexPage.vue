@@ -3,17 +3,20 @@
     <v-row style="width: 100%">
       <v-col
         cols="6"
-        v-for="card in cards">
+        v-for="card in cards"
+      >
         <v-card :title="typeof card.title === 'function' ? card.title() : card.title">
           <v-skeleton-loader
             :loading="openEms.isLoading"
             height="240"
-            type="image, list-item-two-line">
+            type="image, list-item-two-line"
+          >
             <v-container>
               <status-card
                 v-for="item in card.items"
                 :title="item.title"
-                :value="item.value" />
+                :value="item.value"
+              />
             </v-container>
           </v-skeleton-loader>
         </v-card>
@@ -23,14 +26,14 @@
 </template>
 
 <script setup lang="ts">
-import {computed, onUnmounted, ref} from "vue";
-import {convertVolts, convertWatts, covertHertz, limitTextLength, powerChannelStatus} from "../helpers/conversions";
+import { computed, onUnmounted, ref } from "vue";
+import { convertVolts, convertWatts, covertHertz, limitTextLength, powerChannelStatus } from "../helpers/conversions";
 import MainComponent from "../components/MainComponent.vue";
-import StatusCard, {NodeDefinition} from "../components/StatusCard.vue";
-import {ChannelItem, sellToGridLimitStateToString} from "../services/openems/types";
+import StatusCard, { NodeDefinition } from "../components/StatusCard.vue";
+import { ChannelItem, sellToGridLimitStateToString } from "../services/openems/types";
 import PercentageBarComponent from "../components/PercentageBarComponent.vue";
-import {useComponentsStore} from "../stores/openems-components-store";
-import {useOpenEms} from "../services/openems";
+import { useComponentsStore } from "../stores/openems-components-store";
+import { useOpenEms } from "../services/openems";
 
 interface Card {
   title: string | (() => string);
@@ -151,7 +154,7 @@ const cards = computed<Card[]>(() => {
             const buy = gridBuyPower.value?.value;
             const power = sell || -buy;
             const status = powerChannelStatus(power || 0, "", "(buying)", "(selling)");
-            return `${convertWatts({value: power, unit: "W"} as any)} ${status}`;
+            return `${convertWatts({ value: power, unit: "W" } as any)} ${status}`;
           },
         },
         ...secondaryMeters.value.map((meter, index) => {

@@ -1,4 +1,4 @@
-import type {RouteRecordRaw} from "vue-router";
+import type { RouteRecordRaw } from "vue-router";
 import MainLayout from "../layouts/MainLayout.vue";
 import AutarkyPage from "../pages/AutarkyPage.vue";
 import CellBalancePage from "../pages/CellBalancePage.vue";
@@ -13,36 +13,36 @@ const routes: RouteRecordRaw[] = [
     path: "/",
     component: MainLayout,
     children: [
-      {path: "", name: "Dashboard", component: IndexPage, meta: {icon: "mdi-view-dashboard"}},
+      { path: "", name: "Dashboard", component: IndexPage, meta: { icon: "mdi-view-dashboard" } },
       {
         path: "battery/module-temperatures",
         name: "Module Temperatures",
         component: ModuleTemperatures,
-        meta: {icon: "mdi-thermometer-lines"},
+        meta: { icon: "mdi-thermometer-lines" },
       },
       {
         path: "battery/cell-balance",
         name: "Battery Cell Balance",
         component: CellBalancePage,
-        meta: {icon: "mdi-battery-heart"},
+        meta: { icon: "mdi-battery-heart" },
       },
       {
         path: "graphs/forecast",
         name: "Forecast & Production",
         component: ForecastPage,
-        meta: {icon: "mdi-sun-clock-outline"},
+        meta: { icon: "mdi-sun-clock-outline" },
       },
       {
         path: "graphs/autarky",
         name: "Autarky Graph",
         component: AutarkyPage,
-        meta: {icon: "mdi-chart-line"},
+        meta: { icon: "mdi-chart-line" },
       },
       {
         path: "photovoltaic/strings",
         name: "MPPT Trackers",
         component: PhotovoltaicPage,
-        meta: {icon: "mdi-solar-power-variant-outline"},
+        meta: { icon: "mdi-solar-power-variant-outline" },
       },
     ],
   },

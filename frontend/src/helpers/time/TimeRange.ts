@@ -1,4 +1,4 @@
-import {Instant} from "./Instant";
+import { Instant } from "./Instant";
 
 export class TimeRange {
   readonly #start: Instant | undefined;

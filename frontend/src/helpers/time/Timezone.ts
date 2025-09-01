@@ -1,6 +1,6 @@
 import moment from "moment-timezone";
-import {Instant} from "./Instant.js";
-import {Timestamp} from "./Timestamp";
+import { Instant } from "./Instant.js";
+import { Timestamp } from "./Timestamp";
 
 export type ParseFormatSpecification = moment.MomentFormatSpecification;
 

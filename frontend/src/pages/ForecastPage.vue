@@ -6,7 +6,8 @@
           <v-row>
             <v-col
               cols="1"
-              style="writing-mode: vertical-rl; transform: rotate(180deg); align-content: flex-end">
+              style="writing-mode: vertical-rl; transform: rotate(180deg); align-content: flex-end"
+            >
               Weather-based Forecast<br />and Production
             </v-col>
             <v-col cols="11">
@@ -15,13 +16,15 @@
                 :converter="convertWatts"
                 :loading="loading"
                 style="height: 390px"
-                group="forecast" />
+                group="forecast"
+              />
             </v-col>
           </v-row>
           <v-row>
             <v-col
               cols="1"
-              style="writing-mode: vertical-rl; transform: rotate(180deg); align-content: flex-end">
+              style="writing-mode: vertical-rl; transform: rotate(180deg); align-content: flex-end"
+            >
               Clear Sky Forecast
             </v-col>
             <v-col cols="11">
@@ -30,7 +33,8 @@
                 :converter="convertWatts"
                 :loading="loading"
                 style="height: 390px"
-                group="forecast" />
+                group="forecast"
+              />
             </v-col>
           </v-row>
         </v-container>
@@ -38,12 +42,14 @@
     </main-component>
     <div
       class="position-absolute bottom-0"
-      style="right: 10px">
+      style="right: 10px"
+    >
       <span class="mr-2">Powered by forecast.solar</span>
       <img
         src="/assets/images/forecast-solar-logo.png"
         alt="Powered by Forecast.Solar"
-        style="width: 30px; height: 30px; vertical-align: -7px" />
+        style="width: 30px; height: 30px; vertical-align: -7px"
+      />
     </div>
   </div>
 </template>
@@ -51,14 +57,14 @@
 <script setup lang="ts">
 import MainComponent from "../components/MainComponent.vue";
 import LineChartComponent from "../components/LineChartComponent.vue";
-import {filterAndExpandForecastSeries} from "../helpers/series";
-import {computed, onUnmounted, ref} from "vue";
-import {convertWatts} from "../helpers/conversions";
-import {LOCAL, UTC} from "../helpers/time/Timezone";
-import {connect, disconnect} from "echarts/core";
-import {useOpenEms} from "../services/openems";
-import {useForecastSolar} from "../services/forecastsolar";
-import {Forecast} from "../services/forecastsolar/types";
+import { filterAndExpandForecastSeries } from "../helpers/series";
+import { computed, onUnmounted, ref } from "vue";
+import { convertWatts } from "../helpers/conversions";
+import { LOCAL, UTC } from "../helpers/time/Timezone";
+import { connect, disconnect } from "echarts/core";
+import { useOpenEms } from "../services/openems";
+import { useForecastSolar } from "../services/forecastsolar";
+import { Forecast } from "../services/forecastsolar/types";
 
 const openEms = useOpenEms();
 const forecastSolar = useForecastSolar();
@@ -109,7 +115,7 @@ const loadForecasts = async () => {
   const actual = await forecastSolar.queryWeatherBasedSolarForecast();
   const clearSky = await forecastSolar.queryClearSkySolarForecast();
 
-  const today = LOCAL.now().set({hour: 0, minute: 0, second: 0, millisecond: 0});
+  const today = LOCAL.now().set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
   const timeseries = await openEms.queryHistoricData(
     today,
     today,

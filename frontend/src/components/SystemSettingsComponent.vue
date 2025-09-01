@@ -13,7 +13,8 @@
               label="IP Address"
               variant="filled"
               placeholder="192.168.1.100"
-              class="mt-2" />
+              class="mt-2"
+            />
           </v-list-item>
 
           <v-divider></v-divider>
@@ -25,63 +26,74 @@
             </v-list-item-subtitle>
             <v-expansion-panels
               variant="accordion"
-              class="mt-2">
+              class="mt-2"
+            >
               <v-expansion-panel
                 v-for="plane in availablePlanes"
-                :key="plane.componentName">
+                :key="plane.componentName"
+              >
                 <v-expansion-panel-title
                   expand-icon="mdi-menu-down"
-                  collapse-icon="mdi-menu-up">
+                  collapse-icon="mdi-menu-up"
+                >
                   {{ plane.alias }} ({{ plane.componentName }})
                 </v-expansion-panel-title>
                 <v-expansion-panel-text>
                   <v-list>
                     <bind-component v-model="configPlanes[plane.componentName]">
-                      <template #default="{model}">
+                      <template #default="{ model }">
                         <v-list-item>
                           <v-list-item-subtitle>Connectivity</v-list-item-subtitle>
                           <v-container>
                             <v-row>
                               <v-col
                                 cols="3"
-                                class="text-start">
+                                class="text-start"
+                              >
                                 PV Port:
                               </v-col>
                               <v-col
                                 cols="3"
-                                class="text-start">
+                                class="text-start"
+                              >
                                 {{ plane.pvPortName }}
                               </v-col>
                               <v-col
                                 cols="3"
-                                class="text-start">
+                                class="text-start"
+                              >
                                 MPPT Tracker:
                               </v-col>
                               <v-col
                                 cols="3"
-                                class="text-start">
+                                class="text-start"
+                              >
                                 {{ plane.mpptPortName }}
                               </v-col>
                             </v-row>
                             <v-row>
                               <v-col
                                 cols="3"
-                                class="text-start">
+                                class="text-start"
+                              >
                                 Max Power:
                               </v-col>
                               <v-col
                                 cols="3"
-                                class="text-start">
+                                class="text-start"
+                              >
                                 {{ convertWatts(plane.maxPower) }}p
                               </v-col>
                               <v-col
                                 cols="3"
-                                class="text-start">
+                                class="text-start"
+                              >
                                 Inverter:
                               </v-col>
                               <v-col
                                 cols="3"
-                                class="text-start">
+                                class="text-start"
+                              >
                                 {{ plane.inverterName }}
                               </v-col>
                             </v-row>
@@ -96,7 +108,8 @@
                             variant="filled"
                             placeholder="0"
                             class="mt-2"
-                            type="number" />
+                            type="number"
+                          />
                         </v-list-item>
                         <v-list-item>
                           <v-list-item-subtitle>Azimuth</v-list-item-subtitle>
@@ -108,7 +121,8 @@
                             placeholder="0"
                             class="mt-2"
                             type="number"
-                            validate-on="input" />
+                            validate-on="input"
+                          />
                         </v-list-item>
                       </template>
                     </bind-component>
@@ -124,17 +138,17 @@
 </template>
 
 <script setup lang="ts">
-import {Config, PhotovoltaicPlaneConfig} from "../services/config/types";
-import {validateInt, validateIpAddr} from "../helpers/validators";
-import {useOpenEms} from "../services/openems";
-import {computed, ref} from "vue";
+import { Config, PhotovoltaicPlaneConfig } from "../services/config/types";
+import { validateInt, validateIpAddr } from "../helpers/validators";
+import { useOpenEms } from "../services/openems";
+import { computed, ref } from "vue";
 import BindComponent from "./BindComponent.vue";
-import {PhotovoltaicPlane} from "../services/openems/types";
-import {convertWatts} from "../helpers/conversions";
+import { PhotovoltaicPlane } from "../services/openems/types";
+import { convertWatts } from "../helpers/conversions";
 
 const openEms = useOpenEms();
 
-const {config} = defineProps<{config: Config}>();
+const { config } = defineProps<{ config: Config }>();
 
 const availablePlanes = ref<PhotovoltaicPlane[]>([]);
 const configPlanes = ref<Record<string, PhotovoltaicPlaneConfig>>({});

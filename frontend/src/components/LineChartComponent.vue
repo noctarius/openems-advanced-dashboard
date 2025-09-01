@@ -4,17 +4,18 @@
     class="chart"
     :loading="loading"
     :group="group"
-    :update-options="{notMerge: true}"
-    manual-update />
+    :update-options="{ notMerge: true }"
+    manual-update
+  />
 </template>
 
 <script setup lang="ts">
 import VChart from "vue-echarts";
 import Chart from "vue-echarts";
-import {ref, watchEffect} from "vue";
-import {EChartsOption} from "echarts";
-import {LOCAL} from "../helpers/time/Timezone";
-import {Timestamp} from "../helpers/time/Timestamp";
+import { ref, watchEffect } from "vue";
+import { EChartsOption } from "echarts";
+import { LOCAL } from "../helpers/time/Timezone";
+import { Timestamp } from "../helpers/time/Timestamp";
 
 interface DataSeries {
   name: string;

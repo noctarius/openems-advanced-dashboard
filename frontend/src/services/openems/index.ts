@@ -1,8 +1,8 @@
-import {defineStore} from "pinia";
-import {computed, ref} from "vue";
-import {CallOpenEmsApi} from "../../../wailsjs/go/main/App";
-import {Instant} from "../../helpers/time/Instant";
-import {useComponentsStore} from "../../stores/openems-components-store";
+import { defineStore } from "pinia";
+import { computed, ref } from "vue";
+import { CallOpenEmsApi } from "../../../wailsjs/go/main/App";
+import { Instant } from "../../helpers/time/Instant";
+import { useComponentsStore } from "../../stores/openems-components-store";
 import {
   Battery,
   ChannelItem,
@@ -288,8 +288,8 @@ export const useOpenEms = defineStore("openems", () => {
       .map(address => channelItemCache.value[address]);
   };
 
-  const readComponents = (): {components: string[]; meta: string[]} => {
-    if (!isConfigured.value) return {components: [], meta: []};
+  const readComponents = (): { components: string[]; meta: string[] } => {
+    if (!isConfigured.value) return { components: [], meta: [] };
     const configurations = readComponentConfigurations();
     return {
       components: Object.keys(configurations).filter(component => !component.startsWith("_")),

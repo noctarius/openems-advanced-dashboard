@@ -2,10 +2,12 @@
   <v-tabs v-model="tabs">
     <v-tab
       v-for="battery in batteries"
-      :value="`battery-${battery.id}`">
+      :value="`battery-${battery.id}`"
+    >
       <span
         v-for="tower in battery.towers"
-        :key="tower.id">
+        :key="tower.id"
+      >
         Tower {{ tower.id + 1 }} </span
       ><br />
       <span style="font-size: smaller">(Battery {{ battery.id + 1 }})</span>
@@ -16,17 +18,20 @@
     <v-tabs-window-item
       v-for="battery in batteries"
       :key="`battery-${battery.id}`"
-      :value="`battery-${battery.id}`">
+      :value="`battery-${battery.id}`"
+    >
       <v-container>
         <v-row>
           <v-col
             cols="12"
-            class="battery-tower">
+            class="battery-tower"
+          >
             <battery-component
               v-if="battery"
               :key="battery.id"
-              :battery="battery">
-              <template #default="{module}">
+              :battery="battery"
+            >
+              <template #default="{ module }">
                 <slot :module="module"></slot>
               </template>
             </battery-component>
@@ -39,14 +44,14 @@
 
 <script setup lang="ts">
 import BatteryComponent from "./BatteryComponent.vue";
-import {onUnmounted, reactive, ref} from "vue";
-import {Battery} from "../services/openems/types";
-import {useOpenEms} from "../services/openems";
+import { onUnmounted, reactive, ref } from "vue";
+import { Battery } from "../services/openems/types";
+import { useOpenEms } from "../services/openems";
 
 const openEms = useOpenEms();
 
 const batteries = reactive<Battery[]>([]);
-const selectedBattery = reactive<{id: number | undefined}>({id: undefined});
+const selectedBattery = reactive<{ id: number | undefined }>({ id: undefined });
 const tabs = ref<string | null>(null);
 
 const updateVisualBattery = async () => {

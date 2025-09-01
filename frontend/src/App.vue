@@ -7,10 +7,10 @@
 </template>
 
 <script setup lang="ts">
-import {useComponentsStore} from "./stores/openems-components-store";
-import {useConfigStore} from "./services/config";
-import {useOpenEms} from "./services/openems";
-import {useForecastSolar} from "./services/forecastsolar";
+import { useComponentsStore } from "./stores/openems-components-store";
+import { useConfigStore } from "./services/config";
+import { useOpenEms } from "./services/openems";
+import { useForecastSolar } from "./services/forecastsolar";
 
 useConfigStore()
   .initialize()

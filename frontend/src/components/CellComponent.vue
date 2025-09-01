@@ -1,9 +1,10 @@
 <template>
   <td
-    :class="{'flash-border': flash, 'cell': 'cell'}"
+    :class="{ 'flash-border': flash, cell: 'cell' }"
     :style="{
       backgroundColor: calculatedCellColor,
-    }">
+    }"
+  >
     {{ value }} mV
   </td>
 </template>
@@ -22,8 +23,8 @@ const median = (values: Cell[]): number => {
 };
 </script>
 <script setup lang="ts">
-import {computed, ref, watch} from "vue";
-import {Cell} from "../services/openems/types";
+import { computed, ref, watch } from "vue";
+import { Cell } from "../services/openems/types";
 
 const props = defineProps<{
   cell: Cell;
@@ -49,7 +50,7 @@ watch(
       flash.value = false;
     }, 2000);
   },
-  {deep: true},
+  { deep: true },
 );
 
 const calculatedCellColor = computed(() => {

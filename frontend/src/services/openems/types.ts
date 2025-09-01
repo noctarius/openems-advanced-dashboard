@@ -30,7 +30,7 @@ export function sellToGridLimitStateToString(state: SellToGridLimitState): strin
 export interface Component {
   alias: string;
   factoryId: string;
-  properties: {[key: string]: any};
+  properties: { [key: string]: any };
 }
 
 export interface ValueEntity {

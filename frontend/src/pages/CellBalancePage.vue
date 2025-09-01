@@ -1,7 +1,7 @@
 <template>
   <main-component title="Battery Cell Balance">
     <visual-battery-component>
-      <template #default="{module}">
+      <template #default="{ module }">
         <CellBalanceModuleComponent :module="module" />
       </template>
     </visual-battery-component>

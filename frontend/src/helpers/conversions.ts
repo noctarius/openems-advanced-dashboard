@@ -1,4 +1,4 @@
-import {ChannelItem, ValueEntity} from "../services/openems/types";
+import { ChannelItem, ValueEntity } from "../services/openems/types";
 
 type ConversionItem = ChannelItem | ValueEntity | number | undefined;
 

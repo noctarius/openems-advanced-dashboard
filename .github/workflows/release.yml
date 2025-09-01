@@ -27,7 +27,7 @@ jobs:
       - name: Setup Environment
         run: |
           sudo apt update
-          sudo apt install -y libwebkit2gtk-4.0-dev build-essential
+          sudo apt install -y libwebkit2gtk-4.1-dev build-essential
       - name: Install Dependencies
         run: |
           cd frontend
@@ -38,7 +38,7 @@ jobs:
           mkdir artifacts
       - name: Build Application
         run: |
-          wails build -platform linux/${{ matrix.arch }} -o oad
+          wails build -platform linux/${{ matrix.arch }} -o oad -tags webkit2_41
       - name: Package Application (linux/${{ matrix.arch }})
         run: |
           tar cvfz artifacts/oad_linux_${{ matrix.arch }}.tar.gz build/bin/*

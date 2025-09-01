@@ -52,9 +52,6 @@ jobs:
         architecture: ${{ matrix.arch }}
     - name: Setup Node
       uses: actions/setup-node@v4
-    - name: Setup Environment
-      run: |
-        xcode-select --install
     - name: Build Application
       run: |
         wails build -platform darwin/arm64 -o "OpenEMS Advanced Dashboard.app"

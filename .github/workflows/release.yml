@@ -114,7 +114,7 @@ jobs:
         wails build -platform windows/${{ matrix.arch }}
     - name: Package Application (windows/${{ matrix.arch }})
       run: |
-        zip artifacts/oad_windows_${{ matrix.arch }}.zip build/bin/*
+        Compress-Archive -Path build\bin\* -DestinationPath artifacts\oad_windows_${{ matrix.arch }}.zip
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:

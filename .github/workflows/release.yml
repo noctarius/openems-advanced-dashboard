@@ -109,6 +109,7 @@ jobs:
         cd ..
         go install github.com/wailsapp/wails/v2/cmd/wails@latest
         wails doctor
+        mkdir artifacts
     - name: Build Application
       run: |
         wails build -platform windows/${{ matrix.arch }}

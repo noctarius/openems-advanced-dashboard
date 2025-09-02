@@ -7,10 +7,15 @@ import ForecastPage from "../pages/ForecastPage.vue";
 import IndexPage from "../pages/IndexPage.vue";
 import ModuleTemperatures from "../pages/ModuleTemperatures.vue";
 import PhotovoltaicPage from "../pages/PhotovoltaicPage.vue";
+import FirstStartWizardLayout from "../layouts/FirstStartWizardLayout.vue";
 
 const routes: RouteRecordRaw[] = [
   {
-    path: "/",
+    path: "/wizard",
+    component: FirstStartWizardLayout
+  },
+  {
+    path: "/dashboard/",
     component: MainLayout,
     children: [
       { path: "", name: "Dashboard", component: IndexPage, meta: { icon: "mdi-view-dashboard" } },

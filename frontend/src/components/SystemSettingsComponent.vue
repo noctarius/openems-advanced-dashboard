@@ -12,7 +12,7 @@
               :rules="[validateIpAddr]"
               label="IP Address"
               variant="filled"
-              placeholder="192.168.1.100"
+              placeholder="e.g. 192.168.1.100 or fd00::1"
               class="mt-2"
             />
           </v-list-item>

@@ -30,6 +30,7 @@ export const useConfigStore = defineStore("config", () => {
       error.value = err as Error;
       throw err;
     }
+    return config.value;
   };
 
   const saveConfig = async (newConfig: Config) => {

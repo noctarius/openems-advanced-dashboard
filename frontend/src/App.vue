@@ -1,33 +1,40 @@
 <template>
   <v-responsive>
     <v-app class="overflow-x-hidden">
-      <router-view />
+      <v-overlay
+        v-if="isLoading"
+        :model-value="isLoading"
+        absolute
+        opacity="0.9"
+        class="d-flex align-center justify-center"
+      >
+        <v-progress-circular
+          indeterminate
+          size="64"
+          color="primary"
+        ></v-progress-circular>
+      </v-overlay>
+      <router-view v-if="!isLoading" />
     </v-app>
   </v-responsive>
 </template>
 
 <script setup lang="ts">
-import { useComponentsStore } from "./stores/openems-components-store";
 import { useConfigStore } from "./services/config";
-import { useOpenEms } from "./services/openems";
-import { useForecastSolar } from "./services/forecastsolar";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+
+const isLoading = ref(true);
+const router = useRouter();
 
 useConfigStore()
   .initialize()
-  .then(async () => {
-    const configStore = useConfigStore();
-    const config = configStore.getConfig();
-    if (config) {
-      const openEms = useOpenEms();
-      const ipAddr = config.system_data.ip_addr;
-      if (ipAddr) {
-        await openEms.setIpAddress(ipAddr);
-      }
-      const componentStore = useComponentsStore();
-      await componentStore.initialize();
-
-      const forecaseSolar = useForecastSolar();
-      await forecaseSolar.initialize();
+  .then(config => {
+    if (!config.system_data.ip_addr) {
+      router.push("/wizard");
+    } else {
+      router.push("/dashboard");
     }
+    isLoading.value = false;
   });
 </script>

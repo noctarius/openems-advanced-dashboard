@@ -49,6 +49,10 @@ import { computed, ref } from "vue";
 import SettingsModal from "../modal/SettingsModal.vue";
 import routes from "../router/routes";
 import type { RouteRecordRaw } from "vue-router";
+import { useConfigStore } from "../services/config";
+import { useOpenEms } from "../services/openems";
+import { useComponentsStore } from "../stores/openems-components-store";
+import { useForecastSolar } from "../services/forecastsolar";
 
 interface LinkProps {
   title: string;
@@ -57,12 +61,37 @@ interface LinkProps {
   icon?: string;
 }
 
+const forecastSolarEnabled = ref(false);
+
+// Initialize OpenEMS service
+(async function () {
+  const configStore = useConfigStore();
+  const config = configStore.getConfig();
+  if (config) {
+    const openEms = useOpenEms();
+    const ipAddr = config.system_data.ip_addr;
+    if (ipAddr) {
+      await openEms.setIpAddress(ipAddr);
+    }
+    const componentStore = useComponentsStore();
+    await componentStore.initialize();
+
+    if (config.forecast_solar.enabled) {
+      const forecastSolar = useForecastSolar();
+      await forecastSolar.initialize();
+    }
+    forecastSolarEnabled.value = config.forecast_solar.enabled;
+  }
+})();
+
+// Build the sidebar menu
 const linksList = computed<LinkProps[]>(() => {
   const links = (prefix: string, route: RouteRecordRaw): { title?: string; icon?: string; link: string }[] => {
     const link = `${prefix}${route.path}`;
+    const disabled = route.path === "graphs/forecast" && !forecastSolarEnabled.value;
     return [
       {
-        title: route.name as string | undefined,
+        title: disabled ? undefined : route.name as string | undefined,
         icon: (route.meta && "icon" in route.meta ? route.meta.icon : "") as string,
         link,
       },

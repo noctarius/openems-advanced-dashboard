@@ -261,6 +261,7 @@ export const useOpenEms = defineStore("openems", () => {
     if (componentCacheUpdateInterval) {
       clearInterval(componentCacheUpdateInterval);
       componentCacheUpdateInterval = undefined;
+      status.value = "idle";
     }
   };
 

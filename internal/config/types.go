@@ -9,6 +9,7 @@ type SystemDataConfig struct {
 }
 
 type ForecastSolarConfig struct {
+	Enabled          bool    `json:"enabled"`
 	ApiKey           string  `json:"api_key"`
 	Latitude         float64 `json:"latitude"`
 	Longitude        float64 `json:"longitude"`

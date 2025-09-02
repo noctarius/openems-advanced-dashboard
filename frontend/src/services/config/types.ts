@@ -12,6 +12,7 @@ export interface SystemDataConfig {
 }
 
 export interface ForecastSolarConfig {
+  enabled: boolean;
   api_key: string;
   latitude: number;
   longitude: number;

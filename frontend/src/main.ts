@@ -45,6 +45,12 @@ try {
       VContainer: {
         style: "max-width: revert !important;",
       },
+      VExpansionPanels: {
+        color: "rgba(240, 198, 147, 0.2)"
+      },
+      VTextField: {
+        color: "rgba(240, 198, 147, 0.2)"
+      }
     },
   });
 

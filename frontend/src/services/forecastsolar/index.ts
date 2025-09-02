@@ -68,6 +68,8 @@ export const useForecastSolar = defineStore("forecast-solar", () => {
   };
 
   const isReady = async () => {
+    const config = configStore.getConfig();
+    if (!config.forecast_solar.enabled) return false;
     return await IsSolarForecastInitialized();
   };
 

@@ -4,7 +4,6 @@
   </div>
   <div
     ref="content"
-    class="overflow-y-auto overflow-x-hidden"
   >
     <slot></slot>
   </div>

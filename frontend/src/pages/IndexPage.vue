@@ -1,6 +1,6 @@
 <template>
   <main-component title="Overview">
-    <v-row style="width: 100%">
+    <v-row style="width: 100%" class="overflow-y-auto overflow-x-hidden">
       <v-col
         cols="6"
         v-for="card in cards"

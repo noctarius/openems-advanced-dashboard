@@ -6,7 +6,7 @@
     fullscreen
     @after-leave="events('closed')"
   >
-    <v-card>
+    <v-card class="overflow-hidden d-flex flex-column h-100" style="height: 100vh;">
       <v-toolbar color="primary">
         <v-btn
           icon="mdi-close"
@@ -19,16 +19,17 @@
         <v-toolbar-items>
           <v-btn
             text="Save"
-            variant="text"
+            variant="tonal"
             @click="saveConfig"
             :disabled="isSaving"
             :loading="isSaving"
+            ripple
           ></v-btn>
         </v-toolbar-items>
       </v-toolbar>
 
-      <v-container>
-        <v-row>
+      <v-container class="d-flex flex-column flex-grow-1 pa-0">
+        <v-row class="flex-grow-1" no-gutters>
           <v-col cols="3">
             <v-tabs
               v-model="tabs"
@@ -40,8 +41,8 @@
               <v-tab value="about">About</v-tab>
             </v-tabs>
           </v-col>
-          <v-col cols="9">
-            <v-tabs-window v-model="tabs">
+          <v-col cols="9" class="d-flex flex-column">
+            <v-tabs-window v-model="tabs" class="flex-grow-1 overflow-hidden">
               <v-tabs-window-item value="openems">
                 <v-container class="overflow-y-auto">
                   <v-card>
@@ -245,13 +246,58 @@
                   </v-card>
                 </v-container>
               </v-tabs-window-item>
-              <v-tabs-window-item value="about">
-                <v-container class="overflow-y-auto">
-                  <v-card>
-                    <v-card-title>About</v-card-title>
-                    <v-card-text></v-card-text>
+              <v-tabs-window-item value="about" class="d-flex flex-column">
+                <div class="overflow-y-auto" style="height: calc(100vh - 64px);">
+                  <h1 class="text-h4 text-center mt-5 mb-8">🙏 Thank You</h1>
+                  <p class="text-center mb-10">
+                    OpenEMS Advanced Dashboard would not be possible without the incredible work of the open-source
+                    community. We gratefully acknowledge the following projects and their contributors:
+                  </p>
+                  <v-card class="overflow-y-auto" style="height: 900px;">
+                    <v-card-text>
+                      <v-row
+                        dense
+                        align="stretch"
+                      >
+                        <v-col
+                          v-for="project in openSourceProjects"
+                          :key="project.name"
+                          class="d-flex"
+                          cols="12"
+                          sm="6"
+                          md="4"
+                        >
+                          <v-card class="rounded-xl elevation-2 d-flex flex-column h-100">
+                            <v-card-title class="text-h6">{{ project.name }}</v-card-title>
+                            <v-card-text class="flex-grow-1">
+                              <p class="mb-3">{{ project.description }}</p>
+                              <p>
+                                <strong>License:</strong>
+                                <a
+                                  :href="project.licenseUrl"
+                                  target="_blank"
+                                  rel="noopener"
+                                  >{{ project.license }}</a
+                                >
+                              </p>
+                            </v-card-text>
+                            <v-card-actions>
+                              <v-btn
+                                :href="project.url"
+                                target="_blank"
+                                rel="noopener"
+                                variant="text"
+                                color="primary"
+                              >
+                                Visit Project
+                              </v-btn>
+                            </v-card-actions>
+                          </v-card>
+                        </v-col>
+                      </v-row>
+                    </v-card-text>
                   </v-card>
-                </v-container>
+                </div>
               </v-tabs-window-item>
             </v-tabs-window>
           </v-col>
@@ -268,10 +314,96 @@ import SystemSettingsComponent from "../components/SystemSettingsComponent.vue";
 import { Config } from "../services/config/types";
 import { validateFloat, validateInt } from "../helpers/validators";
 import { VTextField } from "vuetify/components";
-import { ForecastSolarConfig } from "../services/forecastsolar/types";
 import { useForecastSolar } from "../services/forecastsolar";
 import { useOpenEms } from "../services/openems";
 import { useComponentsStore } from "../stores/openems-components-store";
+
+const openSourceProjects = [
+  {
+    name: "OpenEMS Edge & Backend",
+    url: "https://openems.io/",
+    description: "Open source, modular, and extensible energy management system.",
+    license: "Eclipse Public License 2.0",
+    licenseUrl: "https://github.com/OpenEMS/openems/blob/develop/LICENSE-EPL-2.0",
+  },
+  {
+    name: "OpenEMS UI",
+    url: "https://openems.io/",
+    description: "Open source, modular, and extensible energy management system.",
+    license: "GNU Affero General Public License v3",
+    licenseUrl: "https://github.com/OpenEMS/openems/blob/develop/LICENSE-AGPL-3.0",
+  },
+  {
+    name: "Wails",
+    url: "https://wails.io/",
+    description: "Build desktop apps using Go and web technologies.",
+    license: "MIT License",
+    licenseUrl: "https://github.com/wailsapp/wails/blob/master/LICENSE",
+  },
+  {
+    name: "Vue.js",
+    url: "https://vuejs.org/",
+    description: "The progressive JavaScript framework for building user interfaces.",
+    license: "MIT License",
+    licenseUrl: "https://github.com/vuejs/core/blob/main/LICENSE",
+  },
+  {
+    name: "Vuetify",
+    url: "https://vuetifyjs.com/",
+    description: "A Vue UI framework with beautifully crafted Material Design components.",
+    license: "MIT License",
+    licenseUrl: "https://github.com/vuetifyjs/vuetify/blob/master/LICENSE.md",
+  },
+  {
+    name: "TypeScript",
+    url: "https://www.typescriptlang.org/",
+    description: "A strongly typed programming language that builds on JavaScript.",
+    license: "Apache License 2.0",
+    licenseUrl: "https://github.com/microsoft/TypeScript/blob/main/LICENSE.txt",
+  },
+  {
+    name: "Go",
+    url: "https://go.dev/",
+    description: "An open-source programming language for efficient and reliable software.",
+    license: "BSD-3-Clause License",
+    licenseUrl: "https://github.com/golang/go/blob/master/LICENSE",
+  },
+  {
+    name: "Pinia",
+    url: "https://pinia.vuejs.org/",
+    description: "The intuitive store for Vue.js applications.",
+    license: "MIT License",
+    licenseUrl: "https://github.com/vuejs/pinia/blob/v2/LICENSE",
+  },
+  {
+    name: "Vite",
+    url: "https://vite.dev/",
+    description: "Next-generation frontend tooling for fast builds and hot module replacement.",
+    license: "MIT License",
+    licenseUrl: "https://github.com/vitejs/vite/blob/main/LICENSE",
+  },
+  {
+    name: "ESLint",
+    url: "https://eslint.org/",
+    description: "A tool for identifying and fixing problems in JavaScript code.",
+    license: "MIT License",
+    licenseUrl: "https://github.com/eslint/eslint/blob/main/LICENSE",
+  },
+  {
+    name: "Moment.js",
+    url: "https://momentjs.com/",
+    description: "A legacy JavaScript date library for parsing, validating, and formatting dates.",
+    license: "MIT License",
+    licenseUrl: "https://github.com/moment/moment/blob/develop/LICENSE",
+  },
+  {
+    name: "Apache ECharts",
+    url: "https://echarts.apache.org/",
+    description: "A powerful, interactive charting and visualization library.",
+    license: "Apache License 2.0",
+    licenseUrl: "https://github.com/apache/echarts/blob/master/LICENSE",
+  },
+];
 
 const events = defineEmits(["closed"]);
 const props = defineProps<{ open: boolean }>();
@@ -319,8 +451,8 @@ const saveConfig = async () => {
           pv_port: parseInt(plane.pv_port.toString()),
           azimuth: parseInt(plane.azimuth.toString()),
           declination: parseInt(plane.declination.toString()),
-        }
-      })
+        };
+      }),
     },
     forecast_solar: {
       enabled: currentConfig.value.forecast_solar.enabled.toString() === "true",
@@ -330,7 +462,7 @@ const saveConfig = async () => {
       adjust_with_actual: currentConfig.value.forecast_solar.adjust_with_actual.toString() === "true",
       damping_morning: parseInt(currentConfig.value.forecast_solar.damping_morning.toString()),
       damping_evening: parseInt(currentConfig.value.forecast_solar.damping_evening.toString()),
-    }
+    },
   };
 
   try {
@@ -354,7 +486,11 @@ const saveConfig = async () => {
   }
 
   isSaving.value = false;
-}
+};
 </script>
 
-<style scoped></style>
+<style scoped>
+p .dense {
+  margin: 0;
+}
+</style>

@@ -541,7 +541,6 @@ const initializeOpenEms = async () => {
       backDisabled.value = false;
     }
   } catch (error) {
-    console.log(error);
     connectionError.value =
       error instanceof Error
         ? error.message

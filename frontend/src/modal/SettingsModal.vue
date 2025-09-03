@@ -374,7 +374,7 @@ import { VTextField } from "vuetify/components";
 import { useForecastSolar } from "../services/forecastsolar";
 import { useOpenEms } from "../services/openems";
 import { useComponentsStore } from "../stores/openems-components-store";
-import { handleError } from "../services/errors";
+import { createErrorReport } from "../services/errors";
 
 const openSourceProjects = [
   {
@@ -548,7 +548,7 @@ const saveConfig = async () => {
 };
 
 const createErrorLog = async () => {
-  errorReportFile.value = await handleError("Error Report Created Manually", "Settings Modal");
+  errorReportFile.value = await createErrorReport("Error Report Created Manually", "Settings Modal");
 };
 </script>
 

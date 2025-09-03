@@ -169,7 +169,6 @@ if (openEms.isReady) {
           },
           set(val: PhotovoltaicPlaneConfig) {
             const planes = config?.system_data?.photovoltaic_planes;
-            console.log(planes);
             if (planes) {
               const index = planes.findIndex(v => v.charger_name === plane.componentName);
               planes[index] = val;

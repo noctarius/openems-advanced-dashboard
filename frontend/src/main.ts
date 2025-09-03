@@ -12,7 +12,7 @@ import { useEcharts } from "./echarts";
 import { Router } from "./router";
 import pinia from "./stores";
 import Vue3Toastify, { toast } from "vue3-toastify";
-import { handleError } from "./services/errors";
+import { createErrorReport, handleErrorEvent, handlePromiseRejectionError } from "./services/errors";
 
 try {
   const vuetify = createVuetify({
@@ -78,34 +78,19 @@ try {
     event.stopPropagation();
     event.stopImmediatePropagation();
 
-    const errorMessage = event.message;
-    const location = `${event.filename}:${event.lineno}:${event.colno}`;
-    const error = event.error;
-    const filename = await handleError(errorMessage, location, error);
+    const filename = await handleErrorEvent(event);
     toastError(`I've caught an error and stored the log in <CONFIG_DIR>/${filename}`);
   });
   window.addEventListener("unhandledrejection", async event => {
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
-
-    const errorMessage =
-      event.reason instanceof Error
-        ? event.reason.message
-        : typeof event.reason === "string"
-          ? event.reason
-          : JSON.stringify(event.reason);
-    const location = JSON.stringify(event.composed ? event.composedPath() : event.target);
-    const filename = await handleError(
-      errorMessage,
-      location,
-      event.reason instanceof Error ? event.reason : undefined,
-    );
+    const filename = await handlePromiseRejectionError(event);
     toastError(`I've caught an error and stored the log in <CONFIG_DIR>/${filename}`);
   });
   app.config.errorHandler = (err, vm, info) => {
     const errorMessage = typeof err === "string" ? err : err instanceof Error ? err.message : JSON.stringify(err);
-    handleError(errorMessage, info, err instanceof Error ? err : undefined).then(filename => {
+    createErrorReport(errorMessage, info, err instanceof Error ? err.stack : undefined).then(filename => {
       toastError(`I've caught an error and stored the log in <CONFIG_DIR>/${filename}`);
     });
     return false;

@@ -15,6 +15,18 @@ interface SystemConfiguration {
   heapAllocations: string | string[];
 }
 
+interface PromiseRejectionError {
+  column: number;
+  line: number;
+  message: string;
+  sourceURL: string;
+  stack: string;
+}
+
+function isPromiseRejectionError(obj: any): obj is PromiseRejectionError {
+  return obj && obj.column && obj.line && obj.message && obj.sourceURL && obj.stack;
+}
+
 export function wrapGoSideError(error: GoError): Error {
   const obj: any = {};
   if ("captureStackTrace" in Error) {
@@ -24,17 +36,41 @@ export function wrapGoSideError(error: GoError): Error {
   const goStack = error.stackTrace;
   const jsStack = obj.stack.split("\n");
 
-  const stack = [
-    ...goStack,
-    ...jsStack
-  ].join("\n");
+  const stack = [...goStack, ...jsStack].join("\n");
 
   const newError = new Error(error.message);
   newError.stack = stack;
   return newError;
 }
 
-export async function handleError(errorMessage: string, location: string, error?: Error) {
+export async function handleErrorEvent(event: ErrorEvent) {
+  const errorMessage = event.message;
+  const location = `${event.filename}:${event.lineno}:${event.colno}`;
+  const error = event.error;
+  return await createErrorReport(errorMessage, location, error instanceof Error ? error.stack : undefined);
+}
+
+export async function handlePromiseRejectionError(event: PromiseRejectionEvent) {
+  const errorMessage =
+    event.reason instanceof Error
+      ? event.reason.message
+      : typeof event.reason === "string"
+        ? event.reason
+        : JSON.stringify(event.reason);
+
+  const error = event.reason instanceof Error ? event.reason : undefined;
+  const location = (() => {
+    if (isPromiseRejectionError(error)) {
+      const path = new URL(error.sourceURL).pathname;
+      return `${path}:${error.line}:${error.column}`;
+    }
+    return "unknown";
+  })();
+
+  return await createErrorReport(errorMessage, location, isPromiseRejectionError(error) ? error.stack : undefined);
+}
+
+export async function createErrorReport(errorMessage: string, location: string, stack?: string) {
   const openEms = useOpenEms();
   const config = useConfigStore();
   const componentsStore = useComponentsStore();
@@ -65,7 +101,7 @@ export async function handleError(errorMessage: string, location: string, error?
   const errorLog = {
     errorMessage,
     location,
-    error: JSON.stringify(error),
+    stack: stack?.split(","),
     context: {
       currentConfig,
       createdComponents,

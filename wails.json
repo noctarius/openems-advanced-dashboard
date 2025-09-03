@@ -1,6 +1,10 @@
 {
   "$schema": "https://wails.io/schemas/config.v2.json",
   "name": "OpenEMS Advanced Dashboard",
+  "info": {
+    "productName": "OpenEMS Advanced Dashboard",
+    "productVersion": "0.0.2"
+  },
   "outputfilename": "oad",
   "frontend:install": "npm install",
   "frontend:build": "npm run build",

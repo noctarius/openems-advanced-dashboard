@@ -12,6 +12,7 @@ import {
   ModuleTemperature,
   PhotovoltaicPlane,
 } from "./types";
+import { wrapGoSideError } from "../errors";
 
 const cellIdExtractor = /battery([0-9]+)\/Tower([0-9]+)Module([0-9]+)Cell([0-9]+)Voltage/;
 const moduleTemperatureIdExtractor = /battery([0-9]+)\/Tower([0-9]+)Module([0-9]+)TemperatureSensor([0-9]+)/;
@@ -238,6 +239,9 @@ export const useOpenEms = defineStore("openems", () => {
 
   const callRestApi = async <T>(method: string, path: string, body?: string): Promise<T> => {
     const response = await CallOpenEmsApi(method, path, body);
+    if (response.error) {
+      throw wrapGoSideError(response.error);
+    }
     if (response.statusCode !== 200) {
       throw new Error(`HTTP ${response.statusCode}: ${response.body}`);
     }
@@ -270,6 +274,21 @@ export const useOpenEms = defineStore("openems", () => {
     restApiBase.value = `http://${ipAddress}/rest`;
     jsonApiAddr.value = `http://${ipAddress}:8084/jsonrpc/`;
     await start();
+  };
+
+  const getCachedChannelItems = (): Record<string, ChannelItem> => {
+    return channelItemCache.value;
+  };
+
+  const getCachedComponents = (): Record<string, Component> => {
+    return componentCache.value;
+  };
+
+  const getApiAddresses = (): { restApiBase: string; jsonApiAddr: string } => {
+    return {
+      restApiBase: restApiBase.value!,
+      jsonApiAddr: jsonApiAddr.value!,
+    };
   };
 
   const selectComponents = (componentType: string): string[] => {
@@ -403,5 +422,8 @@ export const useOpenEms = defineStore("openems", () => {
     queryHistoricEnergyPerPeriod,
     queryHistoricData,
     callEdgeRpc,
+    getCachedChannelItems,
+    getCachedComponents,
+    getApiAddresses,
   };
 });

@@ -11,6 +11,8 @@ import "./css/app.scss";
 import { useEcharts } from "./echarts";
 import { Router } from "./router";
 import pinia from "./stores";
+import Vue3Toastify, { toast } from "vue3-toastify";
+import { handleError } from "./services/errors";
 
 try {
   const vuetify = createVuetify({
@@ -46,15 +48,70 @@ try {
         style: "max-width: revert !important;",
       },
       VExpansionPanels: {
-        color: "rgba(240, 198, 147, 0.2)"
+        color: "rgba(240, 198, 147, 0.2)",
       },
       VTextField: {
-        color: "rgba(240, 198, 147, 0.2)"
-      }
+        color: "rgba(240, 198, 147, 0.2)",
+      },
     },
   });
 
-  createApp(App).use(Router).use(vuetify).use(useEcharts).use(pinia).mount("#app");
+  const app = createApp(App) //
+    .use(Router)
+    .use(vuetify)
+    .use(useEcharts)
+    .use(pinia)
+    .use(Vue3Toastify, { autoClose: 3000 });
+
+  // Initialize error handling
+  const toastError = (errorMessage: string) => {
+    toast(errorMessage, {
+      type: "error",
+      position: "top-right",
+      closeOnClick: true,
+      pauseOnHover: true,
+      theme: "light",
+    });
+  };
+  window.addEventListener("error", async event => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+
+    const errorMessage = event.message;
+    const location = `${event.filename}:${event.lineno}:${event.colno}`;
+    const error = event.error;
+    const filename = await handleError(errorMessage, location, error);
+    toastError(`I've caught an error and stored the log in <CONFIG_DIR>/${filename}`);
+  });
+  window.addEventListener("unhandledrejection", async event => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+
+    const errorMessage =
+      event.reason instanceof Error
+        ? event.reason.message
+        : typeof event.reason === "string"
+          ? event.reason
+          : JSON.stringify(event.reason);
+    const location = JSON.stringify(event.composed ? event.composedPath() : event.target);
+    const filename = await handleError(
+      errorMessage,
+      location,
+      event.reason instanceof Error ? event.reason : undefined,
+    );
+    toastError(`I've caught an error and stored the log in <CONFIG_DIR>/${filename}`);
+  });
+  app.config.errorHandler = (err, vm, info) => {
+    const errorMessage = typeof err === "string" ? err : err instanceof Error ? err.message : JSON.stringify(err);
+    handleError(errorMessage, info, err instanceof Error ? err : undefined).then(filename => {
+      toastError(`I've caught an error and stored the log in <CONFIG_DIR>/${filename}`);
+    });
+    return false;
+  };
+
+  app.mount("#app");
 } catch (e) {
   console.error(e);
 }

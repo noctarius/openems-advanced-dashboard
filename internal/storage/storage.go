@@ -21,6 +21,10 @@ func EnsureConfigDirectory() error {
 	return nil
 }
 
+func GetConfigDirectory() (string, error) {
+	return findConfigDirectory()
+}
+
 func ReadFileFromStorage(filename string) (string, error) {
 	data, err := readFileData(filename)
 	if err != nil {

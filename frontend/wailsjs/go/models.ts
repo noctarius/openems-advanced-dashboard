@@ -1,8 +1,28 @@
+export namespace errors {
+	
+	export class GoError {
+	    message: string;
+	    stackTrace: string[];
+	
+	    static createFrom(source: any = {}) {
+	        return new GoError(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.message = source["message"];
+	        this.stackTrace = source["stackTrace"];
+	    }
+	}
+
+}
+
 export namespace openems {
 	
 	export class Response {
 	    body?: string;
 	    statusCode: number;
+	    error?: errors.GoError;
 	
 	    static createFrom(source: any = {}) {
 	        return new Response(source);
@@ -12,7 +32,26 @@ export namespace openems {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.body = source["body"];
 	        this.statusCode = source["statusCode"];
+	        this.error = this.convertValues(source["error"], errors.GoError);
 	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
 	}
 
 }

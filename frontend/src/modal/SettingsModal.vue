@@ -6,7 +6,10 @@
     fullscreen
     @after-leave="events('closed')"
   >
-    <v-card class="overflow-hidden d-flex flex-column h-100" style="height: 100vh;">
+    <v-card
+      class="overflow-hidden d-flex flex-column h-100"
+      style="height: 100vh"
+    >
       <v-toolbar color="primary">
         <v-btn
           icon="mdi-close"
@@ -29,7 +32,10 @@
       </v-toolbar>
 
       <v-container class="d-flex flex-column flex-grow-1 pa-0">
-        <v-row class="flex-grow-1" no-gutters>
+        <v-row
+          class="flex-grow-1"
+          no-gutters
+        >
           <v-col cols="3">
             <v-tabs
               v-model="tabs"
@@ -39,10 +45,17 @@
               <v-tab value="system">System</v-tab>
               <v-tab value="forecast">Forecast</v-tab>
               <v-tab value="about">About</v-tab>
+              <v-tab value="debug">Debug</v-tab>
             </v-tabs>
           </v-col>
-          <v-col cols="9" class="d-flex flex-column">
-            <v-tabs-window v-model="tabs" class="flex-grow-1 overflow-hidden">
+          <v-col
+            cols="9"
+            class="d-flex flex-column"
+          >
+            <v-tabs-window
+              v-model="tabs"
+              class="flex-grow-1 overflow-hidden"
+            >
               <v-tabs-window-item value="openems">
                 <v-container class="overflow-y-auto">
                   <v-card>
@@ -246,14 +259,23 @@
                   </v-card>
                 </v-container>
               </v-tabs-window-item>
-              <v-tabs-window-item value="about" class="d-flex flex-column">
-                <div class="overflow-y-auto" style="height: calc(100vh - 64px);">
+              <v-tabs-window-item
+                value="about"
+                class="d-flex flex-column"
+              >
+                <div
+                  class="overflow-y-auto"
+                  style="height: calc(100vh - 64px)"
+                >
                   <h1 class="text-h4 text-center mt-5 mb-8">🙏 Thank You</h1>
                   <p class="text-center mb-10">
                     OpenEMS Advanced Dashboard would not be possible without the incredible work of the open-source
                     community. We gratefully acknowledge the following projects and their contributors:
                   </p>
-                  <v-card class="overflow-y-auto" style="height: 900px;">
+                  <v-card
+                    class="overflow-y-auto"
+                    style="height: 900px"
+                  >
                     <v-card-text>
                       <v-row
                         dense
@@ -299,6 +321,41 @@
                   </v-card>
                 </div>
               </v-tabs-window-item>
+              <v-tabs-window-item value="debug">
+                <v-container>
+                  <v-card>
+                    <v-card-title>Debug and Support</v-card-title>
+                    <v-card-text>
+                      <v-list-item class="ma-5">
+                        <v-card flat>
+                          <v-card-text>
+                            <v-card-item>
+                              <v-card-subtitle>
+                                If you use an unknown version of OpenEMS, or you have issues with the current build, you
+                                can help us by providing an error report.
+                              </v-card-subtitle>
+                              <div class="d-flex justify-center">
+                                <v-btn
+                                  text="Create Error Log"
+                                  variant="flat"
+                                  color="primary"
+                                  @click="createErrorLog"
+                                />
+                              </div>
+                              <p
+                                v-if="errorReportFile"
+                                class="text-center"
+                              >
+                                Error report generated as: {{ errorReportFile }}
+                              </p>
+                            </v-card-item>
+                          </v-card-text>
+                        </v-card>
+                      </v-list-item>
+                    </v-card-text>
+                  </v-card>
+                </v-container>
+              </v-tabs-window-item>
             </v-tabs-window>
           </v-col>
         </v-row>
@@ -317,6 +374,7 @@ import { VTextField } from "vuetify/components";
 import { useForecastSolar } from "../services/forecastsolar";
 import { useOpenEms } from "../services/openems";
 import { useComponentsStore } from "../stores/openems-components-store";
+import { handleError } from "../services/errors";
 
 const openSourceProjects = [
   {
@@ -415,6 +473,7 @@ const componentsStore = useComponentsStore();
 
 const currentConfig = ref<Config>({} as Config);
 const isSaving = ref(false);
+const errorReportFile = ref<string>();
 
 const tabs = shallowRef("openems");
 const dialog = shallowRef(false);
@@ -486,6 +545,10 @@ const saveConfig = async () => {
   }
 
   isSaving.value = false;
+};
+
+const createErrorLog = async () => {
+  errorReportFile.value = await handleError("Error Report Created Manually", "Settings Modal");
 };
 </script>
 

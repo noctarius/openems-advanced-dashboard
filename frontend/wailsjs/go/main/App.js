@@ -22,6 +22,10 @@ export function GetSolarForecastConfig() {
   return window['go']['main']['App']['GetSolarForecastConfig']();
 }
 
+export function GetSystemConfiguration() {
+  return window['go']['main']['App']['GetSystemConfiguration']();
+}
+
 export function IsSolarForecastInitialized() {
   return window['go']['main']['App']['IsSolarForecastInitialized']();
 }
@@ -32,4 +36,8 @@ export function SaveConfig(arg1) {
 
 export function SetSolarForecastConfig(arg1) {
   return window['go']['main']['App']['SetSolarForecastConfig'](arg1);
+}
+
+export function StoreErrorLog(arg1) {
+  return window['go']['main']['App']['StoreErrorLog'](arg1);
 }

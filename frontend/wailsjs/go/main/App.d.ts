@@ -13,8 +13,12 @@ export function GetSolarForecast(arg1:number):Promise<Array<solarforecast.Foreca
 
 export function GetSolarForecastConfig():Promise<solarforecast.Configuration>;
 
+export function GetSystemConfiguration():Promise<string>;
+
 export function IsSolarForecastInitialized():Promise<boolean>;
 
 export function SaveConfig(arg1:Record<string, any>):Promise<void>;
 
 export function SetSolarForecastConfig(arg1:solarforecast.Configuration):Promise<void>;
+
+export function StoreErrorLog(arg1:string):Promise<string>;

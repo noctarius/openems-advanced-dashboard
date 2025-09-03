@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"myproject/internal/config"
+	"myproject/internal/errors"
 	"myproject/internal/openems"
 	"myproject/internal/solarforecast"
 	"runtime"
@@ -45,7 +46,7 @@ func (a *App) menu() *menu.Menu {
 }
 
 // ### OpenEMS API ###
-func (a *App) CallOpenEmsApi(method, path string, body any) (*openems.Response, error) {
+func (a *App) CallOpenEmsApi(method, path string, body any) *openems.Response {
 	return a.openEms.CallOpenEmsApi(method, path, body)
 }
 
@@ -85,4 +86,14 @@ func (a *App) SaveConfig(c map[string]any) error {
 	d, _ := json.Marshal(c)
 	_ = json.Unmarshal(d, &nw)
 	return config.SaveConfig(nw)
+}
+
+// ### Error API ###
+
+func (a *App) StoreErrorLog(errorLog string) string {
+	return errors.StoreErrorLog(a.ctx, errorLog)
+}
+
+func (a *App) GetSystemConfiguration() string {
+	return errors.GetSystemConfiguration()
 }

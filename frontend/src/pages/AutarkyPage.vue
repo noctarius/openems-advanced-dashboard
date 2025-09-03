@@ -52,7 +52,7 @@ const loadForecasts = async () => {
       today,
       LOCAL.toString(),
       ["_sum/ConsumptionActivePower", "_sum/GridToConsumptionPower"],
-      1,
+      5,
       "Minutes",
     );
 

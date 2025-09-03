@@ -121,8 +121,10 @@ func (s *SolarForecast) getForecast(forecast forecastType, plane SolarPlane, pro
 	if err != nil {
 		return nil, err
 	}
+	defer res.Body.Close()
 
 	if res.StatusCode != 200 {
+		io.Copy(io.Discard, res.Body)
 		return nil, fmt.Errorf("unexpected status code: %d", res.StatusCode)
 	}
 

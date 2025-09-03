@@ -139,18 +139,6 @@
                                   cols="3"
                                   class="text-start"
                                 >
-                                  Max Power:
-                                </v-col>
-                                <v-col
-                                  cols="3"
-                                  class="text-start"
-                                >
-                                  {{ convertWatts(plane.maxPower) }}p
-                                </v-col>
-                                <v-col
-                                  cols="3"
-                                  class="text-start"
-                                >
                                   Inverter:
                                 </v-col>
                                 <v-col
@@ -161,6 +149,18 @@
                                 </v-col>
                               </v-row>
                             </v-container>
+                          </v-list-item>
+                          <v-list-item>
+                            <v-list-item-subtitle>Watts Peak (Wp)</v-list-item-subtitle>
+                            <v-text-field
+                              v-model="model.watts_peak"
+                              :rules="[validateInt]"
+                              label="Watts Peak"
+                              variant="filled"
+                              placeholder="0"
+                              class="mt-2"
+                              type="number"
+                            />
                           </v-list-item>
                           <v-list-item>
                             <v-list-item-subtitle>Declination</v-list-item-subtitle>
@@ -457,6 +457,7 @@ const finish = async () => {
           pv_port: parseInt(plane.pv_port.toString()),
           azimuth: parseInt(plane.azimuth.toString()),
           declination: parseInt(plane.declination.toString()),
+          watts_peak: parseInt(plane.watts_peak.toString()),
         }
       })
     },
@@ -522,6 +523,7 @@ const initializeOpenEms = async () => {
               mppt_port: plane.mpptPort,
               declination: 0,
               azimuth: 0,
+              watts_peak: 0,
             }),
           };
         })

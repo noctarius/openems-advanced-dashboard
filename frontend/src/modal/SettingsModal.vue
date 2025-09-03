@@ -510,6 +510,7 @@ const saveConfig = async () => {
           pv_port: parseInt(plane.pv_port.toString()),
           azimuth: parseInt(plane.azimuth.toString()),
           declination: parseInt(plane.declination.toString()),
+          watts_peak: parseInt(plane.watts_peak.toString()),
         };
       }),
     },

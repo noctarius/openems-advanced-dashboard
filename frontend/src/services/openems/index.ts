@@ -13,6 +13,7 @@ import {
   PhotovoltaicPlane,
 } from "./types";
 import { wrapGoSideError } from "../errors";
+import { useConfigStore } from "../config";
 
 const cellIdExtractor = /battery([0-9]+)\/Tower([0-9]+)Module([0-9]+)Cell([0-9]+)Voltage/;
 const moduleTemperatureIdExtractor = /battery([0-9]+)\/Tower([0-9]+)Module([0-9]+)TemperatureSensor([0-9]+)/;
@@ -127,9 +128,13 @@ const mapPhotovoltaicPlane = (
   const modbusAdapter = readComponentProperty(charger, "_PropertyModbusId");
   const inverterName = readComponentProperty(charger, "_PropertyEssOrBatteryInverterId");
   const maxVoltage = readComponentProperty(charger, "Voltage");
-  const maxPower = readComponentProperty(charger, "MaxActualPower");
 
-  if (!alias || !pvPortName || !mpptPortName || !modbusAdapter || !inverterName || !maxVoltage || !maxPower) {
+  const configStore = useConfigStore();
+  const config = configStore.getConfig();
+  const plane = config.system_data.photovoltaic_planes.find(plane => plane.charger_name === charger);
+  const wattsPeak = plane?.watts_peak || 0;
+
+  if (!alias || !pvPortName || !mpptPortName || !modbusAdapter || !inverterName || !maxVoltage || !wattsPeak) {
     return undefined;
   }
 
@@ -150,9 +155,9 @@ const mapPhotovoltaicPlane = (
       value: maxVoltage.value as number,
       unit: maxVoltage.unit as string,
     },
-    maxPower: {
-      value: maxPower.value as number,
-      unit: maxPower.unit as string,
+    wattsPeak: {
+      value: wattsPeak,
+      unit: "W",
     },
   };
 };

@@ -49,7 +49,7 @@ export interface PhotovoltaicPlane {
   modbusAdapter: string;
   inverterName: string;
   maxVoltage: ValueEntity;
-  maxPower: ValueEntity;
+  wattsPeak: ValueEntity;
 }
 
 export type ValueType = "SHORT" | "INTEGER" | "LONG" | "FLOAT" | "DOUBLE" | "STRING" | "BOOLEAN";

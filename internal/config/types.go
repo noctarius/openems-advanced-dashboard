@@ -24,6 +24,7 @@ type PhotovoltaicPlane struct {
 	MpptPort    int    `json:"mppt_port"`
 	Declination int    `json:"declination"`
 	Azimuth     int    `json:"azimuth"`
+	WattsPeak   int    `json:"watts_peak"`
 }
 
 type Config struct {

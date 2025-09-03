@@ -70,8 +70,8 @@ const cards = computed<Card[]>(() => {
         title: `${plane.alias} (${plane.mpptPortName}, ${plane.pvPortName})`,
         items: [
           {
-            title: "Max Power",
-            value: `${convertWatts(plane.maxPower)}p`,
+            title: "Watts Peak",
+            value: `${convertWatts(plane.wattsPeak)}p`,
           },
           {
             title: "Actual Power",

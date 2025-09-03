@@ -19,7 +19,6 @@
 
           <v-divider></v-divider>
           <v-list-subheader>Photovoltaic Planes</v-list-subheader>
-
           <v-list-item>
             <v-list-item-subtitle style="-webkit-line-clamp: unset; line-clamp: unset">
               Configure your photovoltaic planes
@@ -76,18 +75,6 @@
                                 cols="3"
                                 class="text-start"
                               >
-                                Max Power:
-                              </v-col>
-                              <v-col
-                                cols="3"
-                                class="text-start"
-                              >
-                                {{ convertWatts(plane.maxPower) }}p
-                              </v-col>
-                              <v-col
-                                cols="3"
-                                class="text-start"
-                              >
                                 Inverter:
                               </v-col>
                               <v-col
@@ -98,6 +85,18 @@
                               </v-col>
                             </v-row>
                           </v-container>
+                        </v-list-item>
+                        <v-list-item>
+                          <v-list-item-subtitle>Watts Peak (Wp)</v-list-item-subtitle>
+                          <v-text-field
+                            v-model="model.watts_peak"
+                            :rules="[validateInt]"
+                            label="Watts Peak"
+                            variant="filled"
+                            placeholder="0"
+                            class="mt-2"
+                            type="number"
+                          />
                         </v-list-item>
                         <v-list-item>
                           <v-list-item-subtitle>Declination</v-list-item-subtitle>

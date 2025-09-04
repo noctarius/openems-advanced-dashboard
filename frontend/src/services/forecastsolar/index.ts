@@ -55,7 +55,7 @@ export const useForecastSolar = defineStore("forecast-solar", () => {
             ChargerName: photovoltaicPlane?.componentName,
             Declination: plane.declination,
             Azimuth: plane.azimuth,
-            WattsPeak: (photovoltaicPlane?.wattsPeak.value || 0) / 1000,
+            WattsPeak: (photovoltaicPlane?.wattsPeak.value || 0),
           };
         }),
       });

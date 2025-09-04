@@ -161,7 +161,7 @@ func (s *SolarForecast) makeUrl(forecast forecastType, plane SolarPlane) string 
 		segments,
 		strconv.Itoa(plane.Declination),
 		strconv.Itoa(plane.Azimuth),
-		strconv.FormatFloat(float64(plane.WattsPeak), 'f', 2, 32),
+		strconv.Itoa(plane.WattsPeak),
 	)
 
 	return fmt.Sprintf("%s", strings.Join(segments, "/"))
